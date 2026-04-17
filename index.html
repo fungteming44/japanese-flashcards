@@ -54,128 +54,218 @@
     </style>
 </head>
 <body>
-    <div class="wrap">
-        <div class="topbar">
-            <div>
-                <h1>日文字卡－旅遊篇</h1>
-                <p>已經預載 50+ 句，不使你自己輸入。可直接睇卡、播音、做練習。</p>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button class="chip" id="themeBtn" style="padding: 0.5rem 0.8rem;">🌙/☀️</button>
-                <button class="chip" id="flipBtn" style="padding: 0.5rem 1rem;">收起答案</button>
-            </div>
+<div class="wrap">
+    <div class="topbar">
+        <div>
+            <h1>日文字卡－旅遊篇</h1>
+            <p style="color: var(--color-text-muted); margin: 0;">已經預載 50+ 句，不使你自己輸入。可直接睇卡、播音、做練習。</p>
         </div>
+        <button id="themeBtn" style="width: auto; flex: none; padding: 0.5rem;">🌙/☀️</button>
+    </div>
 
-        <div class="panel filters" id="filters"></div>
+    <div class="panel">
+        <div class="filters" id="filters"></div>
+    </div>
 
-        <div class="panel">
-            <div class="card">
-                <div class="meta"><span id="category"></span><span id="counter"></span></div>
-                <div>
-                    <div class="jp" id="jp"></div>
-                    <div class="reading" id="reading"></div>
-                    <button id="speakBtn">🔊 讀出</button>
-                </div>
+    <div class="panel" id="cardPanel">
+        <div class="card">
+            <div class="meta">
+                <span id="category"></span>
+                <span id="counter"></span>
+            </div>
+            <div>
+                <div class="jp" id="jp"></div>
+                <div class="reading" id="reading"></div>
                 <div class="meaning-wrap" id="meaningWrap">
                     <div class="meaning" id="meaning"></div>
                     <div class="example" id="example"></div>
                 </div>
             </div>
             <div class="controls">
-                <button id="prevBtn">← 上一張</button>
-                <button class="primary" id="nextBtn">下一張 →</button>
+                <button id="speakBtn">🔊 讀出</button>
+                <div style="flex: 1; display: flex; gap: 0.5rem;">
+                    <button id="prevBtn">← 上一張</button>
+                    <button id="flipBtn" class="primary">收起答案</button>
+                    <button id="nextBtn">下一張 →</button>
+                </div>
             </div>
-        </div>
-
-        <div class="controls" style="margin-top: 2rem;">
-            <button class="primary" id="cardModeBtn">字卡模式</button>
-            <button id="practiceModeBtn">練習模式</button>
-        </div>
-
-        <div class="panel hidden" id="practicePanel" style="margin-top: 1.5rem;">
-            <h2>做練習</h2>
-            <div id="practicePrompt" style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 700;"></div>
-            <input type="text" id="practiceInput" placeholder="請輸入日文..." style="width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
-            <div style="display: flex; gap: 10px;">
-                <button class="primary" id="checkBtn">檢查</button>
-                <button id="revealBtn">顯示答案</button>
-                <button id="newPracticeBtn">換一題</button>
-            </div>
-            <div id="feedback" style="margin-top: 1rem; font-weight: 700;"></div>
         </div>
     </div>
 
-    <script>
-        const cards = [
-            { cat: "基本", jp: "こんにちは。", kana: "konnichiwa", zh: "中文：你好。", ex: "用法：日間最基本打招呼。" },
-            { cat: "基本", jp: "ありがとうございます。", kana: "arigatou gozaimasu", zh: "中文：謝謝。", ex: "用法：表示感謝。" },
-            { cat: "求助", jp: "すみません。", kana: "sumimasen", zh: "中文：不好意思 / 請問。", ex: "用法：引起注意或道歉。" },
-            { cat: "交通", jp: "駅はどこですか？", kana: "eki wa doko desu ka", zh: "中文：車站路在哪裏？", ex: "用法：問路時使用。" },
-            { cat: "餐廳", jp: "メニューをください。", kana: "menyuu o kudasai", zh: "中文：請給我菜單。", ex: "用法：點餐時使用。" },
-            { cat: "購物", jp: "これはいくらですか？", kana: "kore wa ikura desu ka", zh: "中文：這個多少錢？", ex: "用法：詢問價格。" },
-            { cat: "酒店", jp: "チェックインをお願いします。", kana: "chekkuin o onegaishimasu", zh: "中文：我想辦理入住。", ex: "用法：到達酒店櫃檯時。" },
-            { cat: "觀光", jp: "写真を撮ってもいいですか？", kana: "shashin o tottemo ii desu ka", zh: "中文：可以拍照嗎？", ex: "用法：徵求許可。" },
-            { cat: "緊急", jp: "助けてください！", kana: "tasukete kudasai", zh: "中文：請救救我！", ex: "用法：遇到危險時。" },
-            { cat: "地名", jp: "福岡", kana: "fukuoka", zh: "中文：福岡", ex: "地點：九州熱門旅遊城市。" },
-            { cat: "食物", jp: "ラーメン", kana: "raamen", zh: "中文：拉麵", ex: "食物：日本代表性美食。" },
-            { cat: "飲品", jp: "お茶", kana: "ocha", zh: "中文：茶", ex: "飲品：日本常用飲品。" },
-            { cat: "數字", jp: "一", kana: "ichi", zh: "中文：1", ex: "數字：基本計數。" }
-            // 更多單字可從附加檔案複製...
-        ];
+    <div class="panel hidden" id="practicePanel">
+        <h3>做練習</h3>
+        <p id="practicePrompt" style="font-size: var(--text-lg); margin-bottom: 1rem;"></p>
+        <input type="text" id="practiceInput" placeholder="請輸入日文..." style="width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
+        <div id="feedback" style="margin-bottom: 1rem; font-weight: 700;"></div>
+        <div class="controls">
+            <button id="checkBtn" class="primary">檢查</button>
+            <button id="revealBtn">顯示答案</button>
+            <button id="newPracticeBtn">換一題</button>
+        </div>
+    </div>
 
-        let current = 0, currentFilter = "", shown = true, practiceIndex = 0;
-        const el = {
-            filters: document.getElementById('filters'), jp: document.getElementById('jp'), reading: document.getElementById('reading'),
-            meaning: document.getElementById('meaning'), example: document.getElementById('example'), category: document.getElementById('category'),
-            counter: document.getElementById('counter'), meaningWrap: document.getElementById('meaningWrap'),
-            flipBtn: document.getElementById('flipBtn'), prevBtn: document.getElementById('prevBtn'), nextBtn: document.getElementById('nextBtn'),
-            speakBtn: document.getElementById('speakBtn'), themeBtn: document.getElementById('themeBtn'), practicePanel: document.getElementById('practicePanel'),
-            practicePrompt: document.getElementById('practicePrompt'), practiceInput: document.getElementById('practiceInput'),
-            feedback: document.getElementById('feedback'), checkBtn: document.getElementById('checkBtn'), revealBtn: document.getElementById('revealBtn'),
-            newPracticeBtn: document.getElementById('newPracticeBtn'), cardModeBtn: document.getElementById('cardModeBtn'), practiceModeBtn: document.getElementById('practiceModeBtn')
-        };
+    <div style="display: flex; gap: 1rem;">
+        <button id="cardModeBtn" class="primary">字卡模式</button>
+        <button id="practiceModeBtn">練習模式</button>
+    </div>
+</div>
 
-        function filteredCards() { return currentFilter ? cards.filter(c => c.cat === currentFilter) : cards; }
+<script>
+const cards = [
+    { cat: "基本", jp: "こんにちは。", kana: "konnichiwa", zh: "中文：你好。", ex: "用法：日間最基本打招呼。" },
+    { cat: "基本", jp: "ありがとうございます。", kana: "arigatou gozaimasu", zh: "中文：謝謝。", ex: "用法：表示感謝。" },
+    { cat: "基本", jp: "はい。", kana: "hai", zh: "中文：是。", ex: "用法：肯定回答。" },
+    { cat: "基本", jp: "いいえ。", kana: "iie", zh: "中文：不是 / 不客氣。", ex: "用法：否定或回應謝謝。" },
+    { cat: "求助", jp: "すみません。", kana: "sumimasen", zh: "中文：不好意思 / 請問。", ex: "用法：引起注意或道歉。" },
+    { cat: "求助", jp: "助けてください。", kana: "tasukete kudasai", zh: "中文：請救救我。", ex: "用法：緊急情況。" },
+    { cat: "求助", jp: "英語が話せますか？", kana: "eigo ga hanasemasu ka", zh: "中文：你會說英語嗎？", ex: "用法：尋找溝通方式。" },
+    { cat: "交通", jp: "駅はどこですか？", kana: "eki wa doko desu ka", zh: "中文：車站路在哪裏？", ex: "用法：問路。" },
+    { cat: "交通", jp: "切符をください。", kana: "kippu o kudasai", zh: "中文：請給我車票。", ex: "用法：買票。" },
+    { cat: "交通", jp: "地下鉄", kana: "chikatetsu", zh: "中文：地鐵", ex: "用法：城市交通。" },
+    { cat: "餐廳", jp: "メニューをください。", kana: "menyuu o kudasai", zh: "中文：請給我菜單。", ex: "用法：點餐時。" },
+    { cat: "餐廳", jp: "お会計をお願いします。", kana: "okaikei o onegaishimasu", zh: "中文：請結帳。", ex: "用法：吃完飯後。" },
+    { cat: "餐廳", jp: "美味しいです。", kana: "oishii desu", zh: "中文：很好吃。", ex: "用法：表達讚賞。" },
+    { cat: "購物", jp: "これはいくらですか？", kana: "kore wa ikura desu ka", zh: "中文：這個多少錢？", ex: "用法：問價錢。" },
+    { cat: "購物", jp: "これをお願いします。", kana: "kore o onegaishimasu", zh: "中文：請給我這個。", ex: "用法：決定購買。" },
+    { cat: "購物", jp: "免税はできますか？", kana: "menzei wa dekimasu ka", zh: "中文：可以免稅嗎？", ex: "用法：旅客購物時。" },
+    { cat: "酒店", jp: "チェックインをお願いします。", kana: "chekkuin o onegaishimasu", zh: "中文：我想辦理入住。", ex: "用法：櫃檯報到。" },
+    { cat: "酒店", jp: "Wi-Fiはありますか？", kana: "waifai wa arimasu ka", zh: "中文：有Wi-Fi嗎？", ex: "用法：詢問上網。" },
+    { cat: "觀光", jp: "写真を撮ってもいいですか？", kana: "shashin o tottemo ii desu ka", zh: "中文：可以拍照嗎？", ex: "用法：徵求許可。" },
+    { cat: "地名", jp: "東京", kana: "toukyou", zh: "中文：東京", ex: "地點：日本首都。" },
+    { cat: "地名", jp: "大阪", kana: "oosaka", zh: "中文：大阪", ex: "地點：關西大城市。" },
+    { cat: "地名", jp: "京都", kana: "kyouto", zh: "中文：京都", ex: "地點：古都。" },
+    { cat: "食物", jp: "ラーメン", kana: "raamen", zh: "中文：拉麵", ex: "食物：日本代表美食。" },
+    { cat: "食物", jp: "寿司", kana: "sushi", zh: "中文：壽司", ex: "食物：傳統日式料理。" },
+    { cat: "飲品", jp: "お茶", kana: "ocha", zh: "中文：茶", ex: "飲品：常用的綠茶。" },
+    { cat: "飲品", jp: "水", kana: "mizu", zh: "中文：水", ex: "飲品：基本需要。" },
+    { cat: "數字", jp: "一", kana: "ichi", zh: "中文：1", ex: "數字：基本計數。" },
+    { cat: "數字", jp: "二", kana: "ni", zh: "中文：2", ex: "數字：基本計數。" },
+    { cat: "數字", jp: "三", kana: "san", zh: "中文：3", ex: "數字：基本計數。" }
+];
 
-        function renderFilters() {
-            const categories = ["", ...new Set(cards.map(c => c.cat))];
-            const names = { "": "全部", "基本": "基本", "求助": "求助", "交通": "交通", "餐廳": "餐廳", "酒店": "酒店", "購物": "購物", "觀光": "觀光", "緊急": "緊急", "地名": "地名", "食物": "食物", "飲品": "飲品", "數字": "數字" };
-            el.filters.innerHTML = categories.map(cat => `<button class="chip ${cat === currentFilter ? 'active' : ''}" data-cat="${cat}">${names[cat] || cat}</button>`).join('');
-            el.filters.querySelectorAll('.chip').forEach(btn => btn.onclick = () => { currentFilter = btn.dataset.cat; current = 0; renderFilters(); renderCard(); });
-        }
+let current = 0, currentFilter = "", shown = true, practiceIndex = 0;
 
-        function renderCard() {
-            const list = filteredCards(), card = list[current];
-            el.category.textContent = card.cat; el.counter.textContent = `${current + 1} / ${list.length}`;
-            el.jp.textContent = card.jp; el.reading.textContent = card.kana; el.meaning.textContent = card.zh; el.example.textContent = card.ex;
-            el.meaningWrap.classList.toggle('hidden', !shown); el.flipBtn.textContent = shown ? "收起答案" : "顯示答案";
-        }
+const el = {
+    filters: document.getElementById('filters'),
+    jp: document.getElementById('jp'),
+    reading: document.getElementById('reading'),
+    meaning: document.getElementById('meaning'),
+    example: document.getElementById('example'),
+    category: document.getElementById('category'),
+    counter: document.getElementById('counter'),
+    meaningWrap: document.getElementById('meaningWrap'),
+    flipBtn: document.getElementById('flipBtn'),
+    prevBtn: document.getElementById('prevBtn'),
+    nextBtn: document.getElementById('nextBtn'),
+    speakBtn: document.getElementById('speakBtn'),
+    themeBtn: document.getElementById('themeBtn'),
+    practicePanel: document.getElementById('practicePanel'),
+    practicePrompt: document.getElementById('practicePrompt'),
+    practiceInput: document.getElementById('practiceInput'),
+    feedback: document.getElementById('feedback'),
+    checkBtn: document.getElementById('checkBtn'),
+    revealBtn: document.getElementById('revealBtn'),
+    newPracticeBtn: document.getElementById('newPracticeBtn'),
+    cardModeBtn: document.getElementById('cardModeBtn'),
+    practiceModeBtn: document.getElementById('practiceModeBtn')
+};
 
-        function speak(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'ja-JP'; u.rate = 0.8; window.speechSynthesis.speak(u); }
+function filteredCards() {
+    return currentFilter ? cards.filter(c => c.cat === currentFilter) : cards;
+}
 
-        el.prevBtn.onclick = () => { current = (current - 1 + filteredCards().length) % filteredCards().length; renderCard(); };
-        el.nextBtn.onclick = () => { current = (current + 1) % filteredCards().length; renderCard(); };
-        el.flipBtn.onclick = () => { shown = !shown; renderCard(); };
-        el.speakBtn.onclick = () => speak(filteredCards()[current].jp);
-        el.themeBtn.onclick = () => { const root = document.documentElement; root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); };
-        el.cardModeBtn.onclick = () => { el.practicePanel.classList.add('hidden'); };
-        el.practiceModeBtn.onclick = () => { el.practicePanel.classList.remove('hidden'); newPractice(); };
+function renderFilters() {
+    const categories = ["", ...new Set(cards.map(c => c.cat))];
+    const names = { "": "全部", "基本": "基本", "求助": "求助", "交通": "交通", "餐廳": "餐廳", "酒店": "酒店", "購物": "購物", "觀光": "觀光", "地名": "地名", "食物": "食物", "飲品": "飲品", "數字": "數字" };
+    el.filters.innerHTML = categories.map(cat => `<button class="chip ${cat === currentFilter ? 'active' : ''}" data-cat="${cat}">${names[cat] || cat}</button>`).join('');
+    el.filters.querySelectorAll('.chip').forEach(btn => btn.onclick = () => {
+        currentFilter = btn.dataset.cat;
+        current = 0;
+        renderFilters();
+        renderCard();
+    });
+}
 
-        function newPractice() {
-            const list = filteredCards(); practiceIndex = Math.floor(Math.random() * list.length);
-            el.practicePrompt.textContent = list[practiceIndex].zh; el.practiceInput.value = ""; el.feedback.textContent = "";
-        }
+function renderCard() {
+    const list = filteredCards(), card = list[current];
+    if (!card) return;
+    el.category.textContent = card.cat;
+    el.counter.textContent = `${current + 1} / ${list.length}`;
+    el.jp.textContent = card.jp;
+    el.reading.textContent = card.kana;
+    el.meaning.textContent = card.zh;
+    el.example.textContent = card.ex;
+    el.meaningWrap.classList.toggle('hidden', !shown);
+    el.flipBtn.textContent = shown ? "收起答案" : "顯示答案";
+}
 
-        el.checkBtn.onclick = () => {
-            const card = filteredCards()[practiceIndex], val = el.practiceInput.value.trim();
-            if (val === card.jp || val === card.kana) { el.feedback.textContent = "✅ 正確！"; el.feedback.style.color = "var(--color-primary)"; }
-            else { el.feedback.textContent = "❌ 錯誤"; el.feedback.style.color = "red"; }
-        };
+function speak(text) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ja-JP';
+    u.rate = 0.5;
+    window.speechSynthesis.speak(u);
+}
 
-        el.revealBtn.onclick = () => { el.feedback.textContent = `答案：${filteredCards()[practiceIndex].jp}`; speak(filteredCards()[practiceIndex].jp); };
-        el.newPracticeBtn.onclick = newPractice;
+el.prevBtn.onclick = () => {
+    const list = filteredCards();
+    current = (current - 1 + list.length) % list.length;
+    renderCard();
+};
+el.nextBtn.onclick = () => {
+    const list = filteredCards();
+    current = (current + 1) % list.length;
+    renderCard();
+};
+el.flipBtn.onclick = () => {
+    shown = !shown;
+    renderCard();
+};
+el.speakBtn.onclick = () => speak(filteredCards()[current].jp);
+el.themeBtn.onclick = () => {
+    const root = document.documentElement;
+    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+};
 
-        renderFilters(); renderCard();
-    </script>
+el.cardModeBtn.onclick = () => {
+    el.practicePanel.classList.add('hidden');
+    el.cardModeBtn.classList.add('primary');
+    el.practiceModeBtn.classList.remove('primary');
+};
+el.practiceModeBtn.onclick = () => {
+    el.practicePanel.classList.remove('hidden');
+    el.practiceModeBtn.classList.add('primary');
+    el.cardModeBtn.classList.remove('primary');
+    newPractice();
+};
+
+function newPractice() {
+    const list = filteredCards();
+    practiceIndex = Math.floor(Math.random() * list.length);
+    el.practicePrompt.textContent = list[practiceIndex].zh;
+    el.practiceInput.value = "";
+    el.feedback.textContent = "";
+}
+
+el.checkBtn.onclick = () => {
+    const card = filteredCards()[practiceIndex], val = el.practiceInput.value.trim();
+    if (val === card.jp || val === card.kana) {
+        el.feedback.textContent = "✅ 正確！";
+        el.feedback.style.color = "var(--color-primary)";
+    } else {
+        el.feedback.textContent = "❌ 錯誤";
+        el.feedback.style.color = "red";
+    }
+};
+
+el.revealBtn.onclick = () => {
+    el.feedback.textContent = `答案：${filteredCards()[practiceIndex].jp}`;
+    speak(filteredCards()[practiceIndex].jp);
+};
+el.newPracticeBtn.onclick = newPractice;
+
+renderFilters();
+renderCard();
+</script>
 </body>
 </html>
