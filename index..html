@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日本旅行50句字卡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+      --radius-md: 0.75rem; --radius-lg: 1rem; --radius-full: 9999px;
+      --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #ffffff; --color-text: #28251d;
+      --color-text-muted: #6f6b63; --color-border: #d4d1ca; --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-chip: #dff1ef;
+      --font-body: 'Noto Sans TC', 'Noto Sans JP', sans-serif; --font-display: 'Noto Sans JP', 'Noto Sans TC', sans-serif;
+      --shadow-md: 0 10px 30px rgba(40,37,29,0.08);
+    }
+    [data-theme="dark"] {
+      --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #22211f; --color-text: #ece8df;
+      --color-text-muted: #b2aca2; --color-border: #393836; --color-primary: #4f98a3; --color-primary-hover: #68abb5; --color-chip: #2c3f40;
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; font-family:var(--font-body); background:linear-gradient(180deg,var(--color-bg),var(--color-surface)); color:var(--color-text); }
+    .wrap { max-width:980px; margin:0 auto; padding:var(--space-6); }
+    .topbar,.controls,.filters,.nav-actions,.practice-actions { display:flex; flex-wrap:wrap; gap:var(--space-3); }
+    .topbar { justify-content:space-between; align-items:center; margin-bottom:var(--space-6); }
+    h1 { margin:0 0 var(--space-2); font-size:var(--text-xl); }
+    h2 { margin:0; font-size:var(--text-lg); }
+    p { margin:0; color:var(--color-text-muted); }
+    .panel { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-6); box-shadow:var(--shadow-md); }
+    button { min-height:44px; padding:0.9rem 1rem; border-radius:var(--radius-full); border:1px solid transparent; background:var(--color-surface-2); color:var(--color-text); font-weight:700; cursor:pointer; }
+    button.primary { background:var(--color-primary); color:#fff; }
+    button.primary:hover { background:var(--color-primary-hover); }
+    button.ghost { background:transparent; border-color:var(--color-border); }
+    .chip { background:var(--color-chip); }
+    .chip.active { border-color:var(--color-primary); color:var(--color-primary); }
+    .card { margin-top:var(--space-6); min-height:360px; display:grid; gap:var(--space-4); align-content:space-between; }
+    .meta { display:flex; justify-content:space-between; gap:var(--space-3); color:var(--color-text-muted); font-size:var(--text-sm); }
+    .jp { font-family:var(--font-display); font-size:clamp(2rem,1.4rem + 2vw,3.2rem); font-weight:700; }
+    .reading { color:var(--color-primary); font-size:var(--text-lg); }
+    .meaning { font-size:var(--text-lg); }
+    .example,.small { color:var(--color-text-muted); }
+    .hidden { display:none; }
+    .practice { margin-top:var(--space-6); display:grid; gap:var(--space-4); }
+    input[type="text"] { width:100%; padding:1rem; border-radius:var(--radius-md); border:1px solid var(--color-border); background:var(--color-surface-2); color:var(--color-text); font-size:var(--text-base); }
+    .feedback { font-weight:700; min-height:1.5em; }
+    .mode-switch { margin-top:var(--space-6); }
+    @media (max-width:640px){ .wrap{padding:var(--space-4);} .topbar{flex-direction:column;align-items:flex-start;} button{width:100%;} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>日本旅行50句字卡</h1>
+        <p>已經預載 50 句，不使你自己輸入。可直接睇卡、播音、做練習。</p>
+      </div>
+      <div class="controls">
+        <button class="ghost" id="themeBtn">🌙 / ☀️</button>
+        <button class="primary" id="speakBtn">🔊 讀出</button>
+        <button class="ghost" id="flipBtn">🔁 顯示答案</button>
+      </div>
+    </div>
+
+    <div class="panel filters" id="filters"></div>
+
+    <div class="panel card">
+      <div>
+        <div class="meta"><span id="category"></span><span id="counter"></span></div>
+        <div class="jp" id="jp"></div>
+        <div class="reading" id="reading"></div>
+        <div class="meaning hidden" id="meaning"></div>
+        <div class="example hidden" id="example"></div>
+      </div>
+      <div class="nav-actions">
+        <button class="ghost" id="prevBtn">← 上一張</button>
+        <button class="primary" id="nextBtn">下一張 →</button>
+      </div>
+    </div>
+
+    <div class="panel mode-switch">
+      <div class="controls">
+        <button class="primary" id="cardModeBtn">字卡模式</button>
+        <button class="ghost" id="practiceModeBtn">練習模式</button>
+      </div>
+    </div>
+
+    <div class="panel practice hidden" id="practicePanel">
+      <div>
+        <h2>練習模式</h2>
+        <p class="small">而家唔使你自己加句子，只會抽已經內置嘅 50 句俾你練。</p>
+      </div>
+      <div id="practicePrompt" class="meaning"></div>
+      <input type="text" id="practiceInput" placeholder="輸入你記得的日文或羅馬拼音" />
+      <div class="practice-actions">
+        <button class="primary" id="checkBtn">檢查</button>
+        <button class="ghost" id="revealBtn">睇答案＋播音</button>
+        <button class="ghost" id="newPracticeBtn">換一句</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="small" id="practiceAnswer"></div>
+    </div>
+  </div>
+
+  <script>
+    const cards = [
+      {cat:'基本', jp:'こんにちは。', kana:'konnichiwa', zh:'你好。', ex:'日間最基本打招呼。'},
+      {cat:'基本', jp:'こんばんは。', kana:'konbanwa', zh:'晚上好。', ex:'夜晚見面可用。'},
+      {cat:'基本', jp:'おはようございます。', kana:'ohayou gozaimasu', zh:'早晨。', ex:'朝早打招呼。'},
+      {cat:'基本', jp:'ありがとうございます。', kana:'arigatou gozaimasu', zh:'非常感謝。', ex:'最常用禮貌句。'},
+      {cat:'基本', jp:'どういたしまして。', kana:'douitashimashite', zh:'不客氣。', ex:'回應對方道謝。'},
+      {cat:'基本', jp:'すみません。', kana:'sumimasen', zh:'不好意思／麻煩你。', ex:'開口前超常用。'},
+      {cat:'基本', jp:'お願いします。', kana:'onegaishimasu', zh:'拜託／麻煩你。', ex:'好多場景都啱用。'},
+      {cat:'基本', jp:'大丈夫です。', kana:'daijoubu desu', zh:'可以／沒問題。', ex:'表示 OK。'},
+      {cat:'基本', jp:'分かりました。', kana:'wakarimashita', zh:'明白了。', ex:'聽明白後回應。'},
+      {cat:'基本', jp:'分かりません。', kana:'wakarimasen', zh:'我不明白。', ex:'唔明時可直接講。'},
+      {cat:'求助', jp:'もう一度お願いします。', kana:'mou ichido onegaishimasu', zh:'麻煩再說一次。', ex:'聽唔切時用。'},
+      {cat:'求助', jp:'もっとゆっくり話してください。', kana:'motto yukkuri hanashite kudasai', zh:'請說慢一點。', ex:'對方講太快就用。'},
+      {cat:'求助', jp:'英語は話せますか。', kana:'eigo wa hanasemasu ka', zh:'你會說英文嗎？', ex:'想轉英文時。'},
+      {cat:'求助', jp:'助けてください。', kana:'tasukete kudasai', zh:'請幫幫我。', ex:'緊急時用。'},
+      {cat:'求助', jp:'トイレはどこですか。', kana:'toire wa doko desu ka', zh:'洗手間在哪裡？', ex:'旅行必學。'},
+      {cat:'交通', jp:'駅はどこですか。', kana:'eki wa doko desu ka', zh:'車站在哪裡？', ex:'問路高頻句。'},
+      {cat:'交通', jp:'この電車は東京に行きますか。', kana:'kono densha wa toukyou ni ikimasu ka', zh:'這班車會去東京嗎？', ex:'搭車前確認。'},
+      {cat:'交通', jp:'新宿まで行きたいです。', kana:'shinjuku made ikitai desu', zh:'我想去新宿。', ex:'直接講目的地。'},
+      {cat:'交通', jp:'何番線ですか。', kana:'nanbansen desu ka', zh:'是幾號月台？', ex:'轉車時好有用。'},
+      {cat:'交通', jp:'ここに行きたいです。', kana:'koko ni ikitai desu', zh:'我想去這裡。', ex:'指住地圖即可。'},
+      {cat:'交通', jp:'バス停はどこですか。', kana:'basutei wa doko desu ka', zh:'巴士站在哪裡？', ex:'搵巴士用。'},
+      {cat:'交通', jp:'この席は空いていますか。', kana:'kono seki wa aiteimasu ka', zh:'這個位有人嗎？', ex:'車上或餐廳都可。'},
+      {cat:'交通', jp:'いくらですか。', kana:'ikura desu ka', zh:'多少錢？', ex:'問票價都得。'},
+      {cat:'餐廳', jp:'これをお願いします。', kana:'kore o onegaishimasu', zh:'我要這個。', ex:'點餐萬用。'},
+      {cat:'餐廳', jp:'おすすめは何ですか。', kana:'osusume wa nan desu ka', zh:'有什麼推薦？', ex:'唔知食乜時。'},
+      {cat:'餐廳', jp:'お水をください。', kana:'omizu o kudasai', zh:'請給我水。', ex:'餐廳實用句。'},
+      {cat:'餐廳', jp:'これは何ですか。', kana:'kore wa nan desu ka', zh:'這是什麼？', ex:'想問菜式內容。'},
+      {cat:'餐廳', jp:'辛いですか。', kana:'karai desu ka', zh:'辣嗎？', ex:'驚太辣可先問。'},
+      {cat:'餐廳', jp:'お会計お願いします。', kana:'okaikei onegaishimasu', zh:'麻煩結帳。', ex:'埋單必用。'},
+      {cat:'餐廳', jp:'持ち帰りできますか。', kana:'mochikaeri dekimasu ka', zh:'可以外帶嗎？', ex:'便利店／食店可用。'},
+      {cat:'酒店', jp:'チェックインお願いします。', kana:'chekkuin onegaishimasu', zh:'我要辦理入住。', ex:'酒店櫃檯直接講。'},
+      {cat:'酒店', jp:'チェックアウトは何時ですか。', kana:'chekkuauto wa nanji desu ka', zh:'幾點退房？', ex:'問退房時間。'},
+      {cat:'酒店', jp:'荷物を預けてもいいですか。', kana:'nimotsu o azuketemo ii desu ka', zh:'可以寄存行李嗎？', ex:'早到／遲走時。'},
+      {cat:'酒店', jp:'Wi-Fiはありますか。', kana:'waifai wa arimasu ka', zh:'有 Wi-Fi 嗎？', ex:'酒店必問之一。'},
+      {cat:'酒店', jp:'タオルをもう一枚ください。', kana:'taoru o mou ichimai kudasai', zh:'請再給我一條毛巾。', ex:'房內用品不足時。'},
+      {cat:'酒店', jp:'部屋の鍵が開きません。', kana:'heya no kagi ga akimasen', zh:'房門打不開。', ex:'有問題時求助。'},
+      {cat:'購物', jp:'これはいくらですか。', kana:'kore wa ikura desu ka', zh:'這個多少錢？', ex:'購物高頻句。'},
+      {cat:'購物', jp:'カードは使えますか。', kana:'kaado wa tsukaemasu ka', zh:'可以用信用卡嗎？', ex:'細店最好先問。'},
+      {cat:'購物', jp:'試着できますか。', kana:'shichaku dekimasu ka', zh:'可以試穿嗎？', ex:'買衫時用。'},
+      {cat:'購物', jp:'別の色はありますか。', kana:'betsu no iro wa arimasu ka', zh:'有其他顏色嗎？', ex:'搵其他款式。'},
+      {cat:'購物', jp:'袋をください。', kana:'fukuro o kudasai', zh:'請給我袋子。', ex:'買完嘢可用。'},
+      {cat:'購物', jp:'免税できますか。', kana:'menzei dekimasu ka', zh:'可以免稅嗎？', ex:'大額購物時用。'},
+      {cat:'觀光', jp:'写真を撮ってもいいですか。', kana:'shashin o tottemo ii desu ka', zh:'可以拍照嗎？', ex:'影相前問一句。'},
+      {cat:'觀光', jp:'ここで食べてもいいですか。', kana:'koko de tabetemo ii desu ka', zh:'可以在這裡吃嗎？', ex:'怕犯禮儀時用。'},
+      {cat:'觀光', jp:'何時に始まりますか。', kana:'nanji ni hajimarimasu ka', zh:'幾點開始？', ex:'活動／景點可用。'},
+      {cat:'觀光', jp:'入ってもいいですか。', kana:'haittemo ii desu ka', zh:'可以進去嗎？', ex:'唔確定可否入內時。'},
+      {cat:'觀光', jp:'今日は開いていますか。', kana:'kyou wa aiteimasu ka', zh:'今天有開嗎？', ex:'去景點前可問。'},
+      {cat:'緊急', jp:'警察を呼んでください。', kana:'keisatsu o yonde kudasai', zh:'請幫我叫警察。', ex:'緊急情況。'},
+      {cat:'緊急', jp:'病院はどこですか。', kana:'byouin wa doko desu ka', zh:'醫院在哪裡？', ex:'身體不適時。'},
+      {cat:'緊急', jp:'気分が悪いです。', kana:'kibun ga warui desu', zh:'我不舒服。', ex:'簡單表達身體不適。'},
+      {cat:'緊急', jp:'パスポートをなくしました。', kana:'pasupooto o nakushimashita', zh:'我弄丟護照了。', ex:'旅行重要句。'},
+        // ===== 口語 50 句，新增開始 =====
+  {cat:'口語', jp:'これは何ですか。', kana:'kore wa nan desu ka', zh:'呢個係乜？', ex:'問清楚係乜嘢。'},
+  {cat:'口語', jp:'ここで食べてもいいですか。', kana:'koko de tabetemo ii desu ka', zh:'可唔可以喺呢度食？', ex:'怕犯邊行邊食規矩時用。'},
+  {cat:'口語', jp:'写真を撮ってもいいですか。', kana:'shashin o tottemo ii desu ka', zh:'可唔可以影相？', ex:'喺店舖、景點影相前問。'},
+  {cat:'口語', jp:'もう一度お願いします。', kana:'mou ichido onegaishimasu', zh:'麻煩再講一次。', ex:'聽唔清楚時用。'},
+  {cat:'口語', jp:'もっとゆっくり話してください。', kana:'motto yukkuri hanashite kudasai', zh:'請講慢啲。', ex:'對方講太快時。'},
+  {cat:'口語', jp:'英語は話せますか。', kana:'eigo wa hanasemasu ka', zh:'你識唔識講英文？', ex:'最後救命用。'},
+  {cat:'口語', jp:'日本語は少しだけ分かります。', kana:'nihongo wa sukoshi dake wakarimasu', zh:'我淨係識少少日文。', ex:'俾對方知你係初學者。'},
+  {cat:'口語', jp:'分かりません。', kana:'wakarimasen', zh:'我唔明。', ex:'唔好硬撐，坦白講唔明。'},
+  {cat:'口語', jp:'分かりました。', kana:'wakarimashita', zh:'我明啦。', ex:'表達你已經聽明。'},
+  {cat:'口語', jp:'これで大丈夫です。', kana:'kore de daijoubu desu', zh:'咁樣就可以啦。', ex:'示意唔需要再加嘢。'},
+
+  {cat:'口語', jp:'〜はどこですか。', kana:'~ wa doko desu ka', zh:'～喺邊度？', ex:'將地名／地方名放「は」前面。'},
+  {cat:'口語', jp:'駅はどこですか。', kana:'eki wa doko desu ka', zh:'車站喺邊？', ex:'問最近車站。'},
+  {cat:'口語', jp:'トイレはどこですか。', kana:'toire wa doko desu ka', zh:'洗手間喺邊？', ex:'超常用。'},
+  {cat:'口語', jp:'この近くにコンビニはありますか。', kana:'kono chikaku ni konbini wa arimasu ka', zh:'附近有冇便利店？', ex:'搵便利店用。'},
+  {cat:'口語', jp:'ここに行きたいです。', kana:'koko ni ikitai desu', zh:'我想去呢度。', ex:'指住地圖／地址。'},
+  {cat:'口語', jp:'おすすめはありますか。', kana:'osusume wa arimasu ka', zh:'有冇推薦？', ex:'叫店員介紹。'},
+  {cat:'口語', jp:'辛くないものはありますか。', kana:'karakunai mono wa arimasu ka', zh:'有冇唔辣嘅？', ex:'驚太辣。'},
+  {cat:'口語', jp:'小さいサイズはありますか。', kana:'chiisai saizu wa arimasu ka', zh:'有冇細 size？', ex:'怕食唔晒。'},
+  {cat:'口語', jp:'テイクアウトできますか。', kana:'teiku auto dekimasu ka', zh:'可唔可以外賣？', ex:'攞走食。'},
+  {cat:'口語', jp:'見ているだけです。', kana:'miteiru dake desu', zh:'淨係睇下先，多謝。', ex:'唔想比人死纏。'},
+
+  {cat:'口語', jp:'お会計お願いします。', kana:'okaikei onegaishimasu', zh:'唔該埋單。', ex:'叫店員埋單。'},
+  {cat:'口語', jp:'別々にお願いします。', kana:'betsu betsuni onegaishimasu', zh:'分開計。', ex:'同朋友一齊時用。'},
+  {cat:'口語', jp:'現金で払います。', kana:'genkin de haraimasu', zh:'我用現金俾。', ex:'表明付款方式。'},
+  {cat:'口語', jp:'カードで払えますか。', kana:'kaado de haraemasu ka', zh:'可唔可以用卡？', ex:'問支唔支援信用卡。'},
+  {cat:'口語', jp:'レシートをください。', kana:'reshiito o kudasai', zh:'請俾收據我。', ex:'要單據留底。'},
+  {cat:'口語', jp:'いくらですか。', kana:'ikura desu ka', zh:'幾多錢？', ex:'最基本問價。'},
+  {cat:'口語', jp:'ちょっと高いです。', kana:'chotto takai desu', zh:'有啲貴。', ex:'委婉咁講貴。'},
+  {cat:'口語', jp:'もう少し安いのはありますか。', kana:'mou sukoshi yasui no wa arimasu ka', zh:'有冇平少少嘅？', ex:'問有冇平啲選擇。'},
+  {cat:'口語', jp:'これにします。', kana:'kore ni shimasu', zh:'我決定要呢個。', ex:'落實選擇。'},
+  {cat:'口語', jp:'荷物を預けてもいいですか。', kana:'nimotsu o azuketemo ii desu ka', zh:'可唔可以寄存行李？', ex:'酒店／景點寄存行李。'},
+
+  {cat:'口語', jp:'チェックインをお願いします。', kana:'chekkuin o onegaishimasu', zh:'我要 check-in。', ex:'到酒店櫃檯時用。'},
+  {cat:'口語', jp:'チェックアウトしたいです。', kana:'chekku auto shitai desu', zh:'我想退房。', ex:'離開酒店時用。'},
+  {cat:'口語', jp:'Wi-Fiのパスワードは何ですか。', kana:'waifai no pasuwaado wa nan desu ka', zh:'Wi‑Fi 密碼係乜？', ex:'問 Wi‑Fi。'},
+  {cat:'口語', jp:'部屋を変えることはできますか。', kana:'heya o kaeru koto wa dekimasu ka', zh:'可唔可以換房？', ex:'房有問題時用。'},
+  {cat:'口語', jp:'すみません、道に迷いました。', kana:'sumimasen, michi ni mayoimashita', zh:'唔好意思，我迷路咗。', ex:'搵人幫手。'},
+  {cat:'口語', jp:'地図を見せてもいいですか。', kana:'chizu o misete mo ii desu ka', zh:'我可以俾你睇地圖嗎？', ex:'指地圖問路。'},
+  {cat:'口語', jp:'ここはどこですか。', kana:'koko wa doko desu ka', zh:'呢度係邊？', ex:'完全唔知自己喺邊。'},
+  {cat:'口語', jp:'この電車は〜に行きますか。', kana:'kono densha wa ~ ni ikimasu ka', zh:'呢班車係咪去～？', ex:'上車前問清楚。'},
+  {cat:'口語', jp:'何番線ですか。', kana:'nanbansen desu ka', zh:'第幾號月台？', ex:'問月台。'},
+  {cat:'口語', jp:'写真を撮ってもらえますか。', kana:'shashin o totte moraemasu ka', zh:'可唔可以幫我影相？', ex:'搵人幫你影。'},
+
+  {cat:'口語', jp:'一緒に写真を撮ってもいいですか。', kana:'issho ni shashin o totte mo ii desu ka', zh:'可唔可以同你影相？', ex:'同店員／角色合照。'},
+  {cat:'口語', jp:'大丈夫です、ありがとう。', kana:'daijoubu desu, arigatou', zh:'唔使啦，多謝。', ex:'婉拒對方幫忙。'},
+  {cat:'口語', jp:'ちょっと考えます。', kana:'chotto kangaemasu', zh:'我再諗一諗先。', ex:'暫時未想買。'},
+  {cat:'口語', jp:'また来ます。', kana:'mata kimasu', zh:'我之後再嚟。', ex:'客氣咁講遲啲再嚟。'},
+  {cat:'口語', jp:'今日はとても楽しかったです。', kana:'kyou wa totemo tanoshikatta desu', zh:'今日好開心。', ex:'同店員／朋友講。'},
+  {cat:'口語', jp:'美味しかったです。', kana:'oishikatta desu', zh:'好好食。', ex:'食完俾好評。'},
+  {cat:'口語', jp:'量が多いです。', kana:'ryou ga ooi desu', zh:'份量好多。', ex:'食唔晒時講。'},
+  {cat:'口語', jp:'少なめにしてください。', kana:'sukuname ni shite kudasai', zh:'可唔可以整少啲？', ex:'想細份少少。'},
+  {cat:'口語', jp:'写真と同じものでしょうか。', kana:'shashin to onaji mono deshou ka', zh:'係咪同相入面嗰樣？', ex:'確認實物同相片。'},
+  {cat:'口語', jp:'助けてください。', kana:'tasukete kudasai', zh:'請幫幫我。', ex:'任何求助場景。'}, 
+  // ===== 口語 50 句，新增完結 ===== 
+    // ===== 地名 cards（福岡／廣島／北九州行程） =====
+  {cat:'地名', jp:'福岡', kana:'fukuoka', zh:'福岡', ex:'你今次落機同最後返機嘅城市。'},
+  {cat:'地名', jp:'博多', kana:'hakata', zh:'博多', ex:'福岡主要車站／新幹線樞紐。'},
+  {cat:'地名', jp:'福岡空港', kana:'fukuoka kuukou', zh:'福岡機場', ex:'你 21/5 落機同 28/5 返香港嘅機場。'},
+  {cat:'地名', jp:'福岡市内', kana:'fukuoka shinai', zh:'福岡市內', ex:'頭兩日活動主要範圍。'},
+  {cat:'地名', jp:'天神', kana:'tenjin', zh:'天神', ex:'福岡市中心商業區、購物區。'},
+  {cat:'地名', jp:'中洲', kana:'nakasu', zh:'中洲', ex:'食店、屋台集中地區。'},
+
+  {cat:'地名', jp:'福岡ドーム', kana:'fukuoka doomu', zh:'福岡巨蛋', ex:'睇福岡軟銀鷹主場棒球嘅球場。'},
+  {cat:'地名', jp:'ホークス', kana:'hookusu', zh:'軟銀鷹', ex:'福岡軟銀鷹球隊。'},
+  {cat:'地名', jp:'王貞治ミュージアム', kana:'oh sadaharu myuujiamu', zh:'王貞治博物館', ex:'福岡巨蛋旁邊嘅王貞治紀念館。'},
+  {cat:'地名', jp:'屋台', kana:'yatai', zh:'屋台', ex:'福岡出名路邊攤檔（拉麵、串燒等）。'},
+
+  {cat:'地名', jp:'広島', kana:'hiroshima', zh:'廣島', ex:'你第三至第六日住宿嘅城市。'},
+  {cat:'地名', jp:'広島駅', kana:'hiroshima eki', zh:'廣島站', ex:'新幹線／JR 主要車站。'},
+  {cat:'地名', jp:'KOKO HOTEL 広島駅前', kana:'koko hoteru hiroshima ekimae', zh:'KOKO HOTEL 廣島站前', ex:'你喺廣島住嘅酒店。'},
+
+  {cat:'地名', jp:'エディオンピースウイング広島', kana:'edion piisu uingu hiroshima', zh:'廣島三箭主場球場', ex:'你 23/5 睇波嘅球場（廣島三箭）。'},
+  {cat:'地名', jp:'サンフレッチェ広島', kana:'sanfu retche hiroshima', zh:'廣島三箭', ex:'J 聯球隊廣島三箭。'},
+
+  {cat:'地名', jp:'平和記念公園', kana:'heiwa kinen kouen', zh:'和平紀念公園', ex:'24/5 行程重點景點。'},
+  {cat:'地名', jp:'原爆ドーム', kana:'genbaku doomu', zh:'原爆圓頂館', ex:'世界遺產，和平紀念公園內重要地標。'},
+  {cat:'地名', jp:'原爆資料館', kana:'genbaku shiryoukan', zh:'原爆紀念館', ex:'介紹原爆歷史嘅博物館。'},
+  {cat:'地名', jp:'折鶴タワー', kana:'orizuru tawaa', zh:'紙鶴塔', ex:'可以摺紙鶴、睇展望台景色。'},
+
+  {cat:'地名', jp:'広島城', kana:'hiroshima jou', zh:'廣島城', ex:'又叫鯉城，廣島市內城堡。'},
+  {cat:'地名', jp:'宮島', kana:'miyajima', zh:'宮島', ex:'25/5 會去嘅離島景點。'},
+  {cat:'地名', jp:'厳島神社', kana:'itsukushima jinja', zh:'嚴島神社', ex:'宮島上最有名嘅海上鳥居神社。'},
+  {cat:'地名', jp:'尾道', kana:'onomichi', zh:'尾道', ex:'26/5 一日遊嘅海邊小城，坡道同貓出名。'},
+
+  {cat:'地名', jp:'北九州', kana:'kitakyuushuu', zh:'北九州', ex:'小倉、門司港、八幡等地所在嘅城市。'},
+  {cat:'地名', jp:'小倉', kana:'kokura', zh:'小倉', ex:'你 27–28/5 住宿嘅城市。'},
+  {cat:'地名', jp:'東横イン 小倉駅新幹線口', kana:'touyoko inn kokura eki shinkansen guchi', zh:'東橫INN 小倉站新幹線口', ex:'你喺小倉住嘅酒店。'},
+  {cat:'地名', jp:'小倉駅', kana:'kokura eki', zh:'小倉站', ex:'北九州主要車站。'},
+
+  {cat:'地名', jp:'小倉城', kana:'kokura jou', zh:'小倉城', ex:'北九州唯一城堡。'},
+  {cat:'地名', jp:'小倉城庭園', kana:'kokura jou teien', zh:'小倉城庭園', ex:'小倉城旁傳統庭園。'},
+  {cat:'地名', jp:'旦過市場', kana:'tanga ichiba', zh:'旦過市場', ex:'被稱為北九州廚房嘅市場。'},
+  {cat:'地名', jp:'リバーウォーク北九州', kana:'ribaa uooku kitakyuushuu', zh:'Riverwalk 北九州', ex:'現代商場，可以同小倉城一齊影相。'},
+
+  {cat:'地名', jp:'門司港', kana:'moji kou', zh:'門司港', ex:'27/5 一日遊重點港口小鎮。'},
+  {cat:'地名', jp:'門司港駅', kana:'moji kou eki', zh:'門司港車站', ex:'百年歷史木造車站。'},
+  {cat:'地名', jp:'ブルーウィングもじ', kana:'buru uingu moji', zh:'藍翼門司吊橋', ex:'Blue Wing Moji，可睇開橋表演。'},
+  {cat:'地名', jp:'門司港レトロ展望室', kana:'moji kou retoro tenboushitsu', zh:'門司港懷舊展望室', ex:'俯瞰關門海峽嘅展望室。'},
+  {cat:'地名', jp:'門司港焼きカレー', kana:'moji kou yaki karee', zh:'門司港燒咖哩', ex:'門司港必食名物。'},
+
+  {cat:'地名', jp:'下関', kana:'shimonoseki', zh:'下關', ex:'關門海峽山口縣一側城市。'},
+  {cat:'地名', jp:'唐戸市場', kana:'karato ichiba', zh:'唐戶市場', ex:'海鮮／壽司有名嘅市場。'},
+  {cat:'地名', jp:'赤間神宮', kana:'akama jingu', zh:'赤間神宮', ex:'龍宮城風格神社。'},
+  {cat:'地名', jp:'関門トンネル人道', kana:'kanmon tonneru jindou', zh:'關門隧道人行道', ex:'海底行人隧道，跨縣地標。'},
+  {cat:'地名', jp:'日清講和記念館', kana:'nisshin kouwa kinenkan', zh:'日清講和紀念館', ex:'春帆樓附近嘅歷史地標。'},
+
+  {cat:'地名', jp:'八幡', kana:'yahata', zh:'八幡', ex:'皿倉山所在地區。'},
+  {cat:'地名', jp:'皿倉山', kana:'sarakura yama', zh:'皿倉山', ex:'新日本三大夜景之一。'},
+  {cat:'地名', jp:'皿倉山ケーブルカー', kana:'sarakura yama keeburukaa', zh:'皿倉山登山纜車', ex:'上皿倉山用嘅纜車。'},
+  {cat:'地名', jp:'スロープカー', kana:'suroopu kaa', zh:'單軌纜車／slope car', ex:'皿倉山頂附近短程單軌車。'},
+  // ===== 地名 cards（福岡／廣島／北九州）完 =====
+    // ===== 食物 cards（主食／小食／甜品）=====
+  // 主食・飯麵
+  {cat:'食物', jp:'ラーメン', kana:'raamen', zh:'拉麵', ex:'屋台、拉麵店必見，如豚骨拉麵。'},
+  {cat:'食物', jp:'とんこつラーメン', kana:'tonkotsu raamen', zh:'豚骨拉麵', ex:'福岡名物，濃湯。'},
+  {cat:'食物', jp:'替え玉', kana:'kaedama', zh:'加麵', ex:'食拉麵想加麵時用。'},
+  {cat:'食物', jp:'うどん', kana:'udon', zh:'烏冬', ex:'粗麵，九州都有好多連鎖。'},
+  {cat:'食物', jp:'そば', kana:'soba', zh:'蕎麥麵', ex:'冷／熱皆可，車站食堂常見。'},
+  {cat:'食物', jp:'冷やし中華', kana:'hiyashi chuuka', zh:'冷中華麵', ex:'夏天常見冷麵。'},
+  {cat:'食物', jp:'カレーライス', kana:'karee raisu', zh:'咖喱飯', ex:'連鎖（CoCo壱）好常見。'},
+  {cat:'食物', jp:'カツカレー', kana:'katsu karee', zh:'吉列豬扒咖喱飯', ex:'咖喱飯＋炸豬扒。'},
+  {cat:'食物', jp:'牛丼', kana:'gyuu don', zh:'牛肉丼', ex:'吉野家、すき家等連鎖常見。'},
+  {cat:'食物', jp:'親子丼', kana:'oyako don', zh:'親子丼', ex:'雞肉＋雞蛋丼飯。'},
+  {cat:'食物', jp:'カツ丼', kana:'katsu don', zh:'吉列豬扒丼', ex:'炸豬扒加蛋汁蓋飯。'},
+  {cat:'食物', jp:'焼き肉', kana:'yakiniku', zh:'燒肉', ex:'自己燒牛肉／豬肉等。'},
+  {cat:'食物', jp:'しゃぶしゃぶ', kana:'shabu shabu', zh:'涮涮鍋', ex:'薄肉片涮火鍋。'},
+  {cat:'食物', jp:'すき焼き', kana:'sukiyaki', zh:'壽喜燒', ex:'甜味火鍋。'},
+  {cat:'食物', jp:'おでん', kana:'oden', zh:'關東煮', ex:'便利店、居酒屋常見。'},
+  {cat:'食物', jp:'おにぎり', kana:'onigiri', zh:'飯糰', ex:'便利店早餐／宵夜好用。'},
+  {cat:'食物', jp:'弁当', kana:'bentou', zh:'便當', ex:'車站、超市常見。'},
+  {cat:'食物', jp:'駅弁', kana:'ekiben', zh:'車站便當', ex:'新幹線上食。'},
+  {cat:'食物', jp:'定食', kana:'teishoku', zh:'定食套餐', ex:'有主菜＋飯＋味噌湯。'},
+  {cat:'食物', jp:'朝食', kana:'choushoku', zh:'早餐', ex:'酒店或定食屋用字。'},
+
+  // 壽司・刺身
+  {cat:'食物', jp:'寿司', kana:'sushi', zh:'壽司', ex:'回轉壽司、壽司店通用字。'},
+  {cat:'食物', jp:'刺身', kana:'sashimi', zh:'刺身', ex:'生魚片。'},
+  {cat:'食物', jp:'まぐろ', kana:'maguro', zh:'吞拿魚', ex:'壽司常見魚生。'},
+  {cat:'食物', jp:'サーモン', kana:'saamon', zh:'三文魚', ex:'壽司、丼飯常見。'},
+  {cat:'食物', jp:'えび', kana:'ebi', zh:'蝦', ex:'壽司／天婦羅都會見。'},
+  {cat:'食物', jp:'いか', kana:'ika', zh:'魷魚', ex:'壽司、燒物常見。'},
+  {cat:'食物', jp:'たこ', kana:'tako', zh:'八爪魚', ex:'章魚燒、壽司常見。'},
+  {cat:'食物', jp:'うに', kana:'uni', zh:'海膽', ex:'高價魚生。'},
+  {cat:'食物', jp:'いくら', kana:'ikura', zh:'三文魚籽', ex:'軍艦壽司常見。'},
+  {cat:'食物', jp:'海鮮丼', kana:'kaisendon', zh:'海鮮丼', ex:'唐戶市場之類地方必見。'},
+
+  // 小食・名物
+  {cat:'食物', jp:'たこ焼き', kana:'takoyaki', zh:'章魚燒', ex:'關西名物，街頭攤檔常見。'},
+  {cat:'食物', jp:'お好み焼き', kana:'okonomiyaki', zh:'大阪燒／御好燒', ex:'廣島也有廣島風お好み焼き。'},
+  {cat:'食物', jp:'焼き鳥', kana:'yakitori', zh:'燒雞串', ex:'居酒屋必見。'},
+  {cat:'食物', jp:'唐揚げ', kana:'karaage', zh:'炸雞塊', ex:'便當、居酒屋都有。'},
+  {cat:'食物', jp:'コロッケ', kana:'korokke', zh:'炸薯餅', ex:'超市熟食常見。'},
+  {cat:'食物', jp:'メンチカツ', kana:'menchi katsu', zh:'肉餅炸物', ex:'超市、街邊小食。'},
+  {cat:'食物', jp:'餃子', kana:'gyouza', zh:'餃子', ex:'拉麵店、餃子專門店常見。'},
+  {cat:'食物', jp:'焼きそば', kana:'yakisoba', zh:'炒麵', ex:'祭典攤檔常見。'},
+  {cat:'食物', jp:'カツサンド', kana:'katsu sando', zh:'吉列豬扒三文治', ex:'便利店有。'},
+  {cat:'食物', jp:'サンドイッチ', kana:'sandoicchi', zh:'三文治', ex:'便利店早餐常見。'},
+  {cat:'食物', jp:'ポテトフライ', kana:'poteto furai', zh:'炸薯條', ex:'快餐店常見。'},
+
+  // 特色地方食物（你旅程會用到）
+  {cat:'食物', jp:'屋台ラーメン', kana:'yatai raamen', zh:'屋台拉麵', ex:'福岡路邊攤拉麵。'},
+  {cat:'食物', jp:'明太子', kana:'mentaiko', zh:'明太子', ex:'福岡名物，常見於飯糰、意粉。'},
+  {cat:'食物', jp:'博多ラーメン', kana:'hakata raamen', zh:'博多拉麵', ex:'福岡地區名物。'},
+  {cat:'食物', jp:'広島風お好み焼き', kana:'hiroshima fuu okonomiyaki', zh:'廣島風御好燒', ex:'廣島必食名物之一。'},
+  {cat:'食物', jp:'もみじ饅頭', kana:'momiji manjuu', zh:'楓葉饅頭', ex:'宮島手信名物。'},
+  {cat:'食物', jp:'牡蠣', kana:'kaki', zh:'蠔', ex:'廣島、宮島出名蠔料理。'},
+  {cat:'食物', jp:'焼き牡蠣', kana:'yaki kaki', zh:'燒蠔', ex:'宮島、廣島街頭常見。'},
+  {cat:'食物', jp:'穴子飯', kana:'anago meshi', zh:'星鰻飯', ex:'宮島名物之一。'},
+  {cat:'食物', jp:'焼きカレー', kana:'yaki karee', zh:'燒咖喱飯', ex:'門司港燒咖哩，北九州名物。'},
+
+  // 便利店／輕食
+  {cat:'食物', jp:'からあげ弁当', kana:'karaage bentou', zh:'炸雞便當', ex:'便利店、超市熟食。'},
+  {cat:'食物', jp:'ハンバーグ弁当', kana:'hanbaagu bentou', zh:'漢堡扒便當', ex:'常見西式便當。'},
+  {cat:'食物', jp:'サラダ', kana:'sarada', zh:'沙律', ex:'便利店沙律。'},
+  {cat:'食物', jp:'ポテトサラダ', kana:'poteto sarada', zh:'薯仔沙律', ex:'家常配菜。'},
+  {cat:'食物', jp:'カップラーメン', kana:'kappu raamen', zh:'杯麵', ex:'便利店宵夜。'},
+
+  // 甜品・點心
+  {cat:'食物', jp:'ケーキ', kana:'keeki', zh:'蛋糕', ex:'咖啡店、甜品店常見。'},
+  {cat:'食物', jp:'プリン', kana:'purin', zh:'布甸', ex:'便利店甜品。'},
+  {cat:'食物', jp:'パフェ', kana:'pafe', zh:'芭菲聖代', ex:'咖啡店甜品。'},
+  {cat:'食物', jp:'アイスクリーム', kana:'aisu kuriimu', zh:'雪糕', ex:'便利店、景點都會買。'},
+  {cat:'食物', jp:'ソフトクリーム', kana:'sofuto kuriimu', zh:'軟雪糕', ex:'景點常見。'},
+  {cat:'食物', jp:'たい焼き', kana:'taiyaki', zh:'鯛魚燒', ex:'街頭甜點。'},
+  {cat:'食物', jp:'どら焼き', kana:'dorayaki', zh:'銅鑼燒', ex:'和菓子代表。'},
+  {cat:'食物', jp:'大福', kana:'daifuku', zh:'大福餅', ex:'麻糬包紅豆、草莓等。'},
+  {cat:'食物', jp:'和菓子', kana:'wagashi', zh:'和菓子', ex:'傳統日式甜點總稱。'},
+  {cat:'食物', jp:'メロンパン', kana:'meron pan', zh:'蜜瓜包', ex:'麵包店、便利店常見。'},
+  {cat:'食物', jp:'カレーパン', kana:'karee pan', zh:'咖喱包', ex:'炸咖喱麵包。'},
+  // ===== 食物 cards 完 =====
+    // ===== 飲品 cards（常見 20 種）=====
+  {cat:'飲品', jp:'水', kana:'mizu', zh:'水', ex:'餐廳免費凍水多數用呢個字。'},
+  {cat:'飲品', jp:'お冷', kana:'ohiya', zh:'凍水', ex:'餐廳寫喺餐牌上嘅叫法。'},
+  {cat:'飲品', jp:'お湯', kana:'oyu', zh:'熱水', ex:'冬天會用到。'},
+  {cat:'飲品', jp:'お茶', kana:'ocha', zh:'茶／綠茶', ex:'一般日式餐廳免費提供。'},
+  {cat:'飲品', jp:'緑茶', kana:'ryokucha', zh:'綠茶', ex:'罐裝飲品常見標示。'},
+  {cat:'飲品', jp:'ほうじ茶', kana:'houjicha', zh:'焙茶', ex:'燒香味綠茶。'},
+  {cat:'飲品', jp:'ウーロン茶', kana:'uuron cha', zh:'烏龍茶', ex:'居酒屋、餐廳常見。'},
+  {cat:'飲品', jp:'麦茶', kana:'mugi cha', zh:'麥茶', ex:'夏天常飲。'},
+
+  {cat:'飲品', jp:'コーヒー', kana:'koohii', zh:'咖啡', ex:'咖啡店、便利店都有。'},
+  {cat:'飲品', jp:'カフェラテ', kana:'kafe rate', zh:'拿鐵', ex:'咖啡店常見。'},
+  {cat:'飲品', jp:'紅茶', kana:'koucha', zh:'紅茶', ex:'Afternoon tea。'},
+  {cat:'飲品', jp:'ジュース', kana:'juusu', zh:'果汁', ex:'餐牌／自販機常見。'},
+  {cat:'飲品', jp:'オレンジジュース', kana:'orenji juusu', zh:'橙汁', ex:'早餐常見。'},
+  {cat:'飲品', jp:'コーラ', kana:'koora', zh:'可樂', ex:'快餐店／自販機常見。'},
+  {cat:'飲品', jp:'ソーダ', kana:'sooda', zh:'梳打汽水', ex:'汽水類總稱。'},
+  {cat:'飲品', jp:'ラムネ', kana:'ramune', zh:'波子汽水', ex:'夏日祭典常見。'},
+
+  {cat:'飲品', jp:'ビール', kana:'biiru', zh:'啤酒', ex:'居酒屋第一句多數係呢個。'},
+  {cat:'飲品', jp:'生ビール', kana:'nama biiru', zh:'生啤', ex:'現拉啤酒。'},
+  {cat:'飲品', jp:'ハイボール', kana:'haibooru', zh:'Highball', ex:'威士忌梳打，居酒屋超常見。'},
+  {cat:'飲品', jp:'日本酒', kana:'nihonshu', zh:'日本酒', ex:'清酒總稱。'},
+  {cat:'飲品', jp:'焼酎', kana:'shouchuu', zh:'燒酎', ex:'九州地區特別常見。'},
+  {cat:'飲品', jp:'梅酒', kana:'umeshu', zh:'梅酒', ex:'女仔幾多人鍾意飲。'},
+  // ===== 飲品 cards 完 =====
+    // ===== 數字 cards（0–10、十位、百千）=====
+  {cat:'數字', jp:'ゼロ／れい', kana:'zero / rei', zh:'0（零）', ex:'有時會講 zero、有時講 rei。'},
+  {cat:'數字', jp:'いち', kana:'ichi', zh:'1（一）', ex:'數量、時間都會用。'},
+  {cat:'數字', jp:'に', kana:'ni', zh:'2（二）', ex:'車站幾號月台等。'},
+  {cat:'數字', jp:'さん', kana:'san', zh:'3（三）', ex:'三號出口、三人等。'},
+  {cat:'數字', jp:'よん', kana:'yon', zh:'4（四）', ex:'常用 yon，比 shi 更安全。'},
+  {cat:'數字', jp:'ご', kana:'go', zh:'5（五）', ex:'五人、五番等。'},
+  {cat:'數字', jp:'ろく', kana:'roku', zh:'6（六）', ex:'六號房等。'},
+  {cat:'數字', jp:'なな', kana:'nana', zh:'7（七）', ex:'常用 nana，比 shichi 更清楚。'},
+  {cat:'數字', jp:'はち', kana:'hachi', zh:'8（八）', ex:'八樓、八號等。'},
+  {cat:'數字', jp:'きゅう', kana:'kyuu', zh:'9（九）', ex:'九日、九號等。'},
+  {cat:'數字', jp:'じゅう', kana:'juu', zh:'10（十）', ex:'十日、十個。'},
+
+  {cat:'數字', jp:'にじゅう', kana:'ni juu', zh:'20（二十）', ex:'二十歲、二十個。'},
+  {cat:'數字', jp:'さんじゅう', kana:'san juu', zh:'30（三十）', ex:'三十歲。'},
+  {cat:'數字', jp:'よんじゅう', kana:'yon juu', zh:'40（四十）', ex:'四十人。'},
+  {cat:'數字', jp:'ごじゅう', kana:'go juu', zh:'50（五十）', ex:'車票價可能見到。'},
+
+  {cat:'數字', jp:'ひゃく', kana:'hyaku', zh:'100（一百）', ex:'一百円。'},
+  {cat:'數字', jp:'さんびゃく', kana:'san byaku', zh:'300（三百）', ex:'發音有變化。'},
+  {cat:'數字', jp:'ろっぴゃく', kana:'roppyaku', zh:'600（六百）', ex:'發音有變化。'},
+  {cat:'數字', jp:'せん', kana:'sen', zh:'1000（一千）', ex:'一千円。'},
+  {cat:'數字', jp:'まん', kana:'man', zh:'萬位（〜萬）', ex:'日圓常用，例如一萬円。'},
+
+  // 實用數量
+  {cat:'數字', jp:'一つ', kana:'hitotsu', zh:'一個', ex:'唔知量詞時可以用。'},
+  {cat:'數字', jp:'二つ', kana:'futatsu', zh:'兩個', ex:'例如二份餐。'},
+  {cat:'數字', jp:'三つ', kana:'mittsu', zh:'三個', ex:'三件紀念品。'},
+  {cat:'數字', jp:'四つ', kana:'yottsu', zh:'四個', ex:'四件。'},
+  {cat:'數字', jp:'五つ', kana:'itsutsu', zh:'五個', ex:'五樣嘢。'},
+  {cat:'數字', jp:'六つ', kana:'muttsu', zh:'六個', ex:'六人份等。'},
+  {cat:'數字', jp:'七つ', kana:'nanatsu', zh:'七個', ex:'七樣。'},
+  {cat:'數字', jp:'八つ', kana:'yattsu', zh:'八個', ex:'八件。'},
+  {cat:'數字', jp:'九つ', kana:'kokonotsu', zh:'九個', ex:'九樣。'},
+  {cat:'數字', jp:'十個', kana:'jukko', zh:'十個', ex:'十份、十杯等。'}
+  // ===== 數字 cards 完 =====
+    ];
+
+    let current = 0, currentFilter = '全部', shown = false;
+    let practiceIndex = 0;
+    const categories = ['全部', ...new Set(cards.map(c => c.cat))];
+    const el = id => document.getElementById(id);
+
+    function filteredCards(){ return currentFilter === '全部' ? cards : cards.filter(c => c.cat === currentFilter); }
+    function renderFilters(){
+      el('filters').innerHTML = categories.map(cat => `<button class="chip ${cat===currentFilter?'active':''}" data-cat="${cat}">${cat}</button>`).join('');
+      document.querySelectorAll('[data-cat]').forEach(btn => btn.onclick = () => { currentFilter = btn.dataset.cat; current = 0; shown = false; renderFilters(); renderCard(); newPractice(); });
+    }
+    function renderCard(){
+      const list = filteredCards(); const card = list[current % list.length];
+      el('category').textContent = card.cat; el('counter').textContent = `${(current % list.length)+1} / ${list.length}`;
+      el('jp').textContent = card.jp; el('reading').textContent = card.kana; el('meaning').textContent = `中文：${card.zh}`; el('example').textContent = `用法：${card.ex}`;
+      el('meaning').classList.toggle('hidden', !shown); el('example').classList.toggle('hidden', !shown);
+      el('flipBtn').textContent = shown ? '🙈 收起答案' : '🔁 顯示答案';
+    }
+    function speak(text){
+      if(!('speechSynthesis' in window)){ alert('此瀏覽器不支援語音朗讀'); return; }
+      const u = new SpeechSynthesisUtterance(text); u.lang='ja-JP'; u.rate=0.1;
+      const voices = speechSynthesis.getVoices(); const ja = voices.find(v => (v.lang||'').toLowerCase().includes('ja'));
+      if(ja) u.voice = ja; speechSynthesis.cancel(); speechSynthesis.speak(u);
+    }
+    function normalize(s){ return s.toLowerCase().replace(/[。？?！!\s]/g,'').trim(); }
+    function newPractice(){
+      const list = filteredCards(); practiceIndex = Math.floor(Math.random()*list.length); const card = list[practiceIndex];
+      el('practicePrompt').textContent = `請講／寫出日文：${card.zh}`; el('practiceInput').value=''; el('feedback').textContent=''; el('practiceAnswer').textContent='';
+    }
+    el('prevBtn').onclick = () => { current = (current - 1 + filteredCards().length) % filteredCards().length; shown = false; renderCard(); };
+    el('nextBtn').onclick = () => { current = (current + 1) % filteredCards().length; shown = false; renderCard(); };
+    el('flipBtn').onclick = () => { shown = !shown; renderCard(); };
+    el('speakBtn').onclick = () => speak(filteredCards()[current].jp);
+    el('themeBtn').onclick = () => { const root = document.documentElement; root.setAttribute('data-theme', root.getAttribute('data-theme')==='dark'?'light':'dark'); };
+    el('cardModeBtn').onclick = () => { el('practicePanel').classList.add('hidden'); };
+    el('practiceModeBtn').onclick = () => { el('practicePanel').classList.remove('hidden'); newPractice(); };
+    el('checkBtn').onclick = () => {
+      const card = filteredCards()[practiceIndex], ans = normalize(el('practiceInput').value);
+      if(!ans){ el('feedback').textContent='你可以先試打羅馬拼音都得。'; return; }
+      if(ans === normalize(card.jp) || ans === normalize(card.kana)) { el('feedback').textContent='答得啱！'; }
+      else { el('feedback').textContent='未完全啱，但方向正確，對一對答案。'; }
+      el('practiceAnswer').textContent = `${card.jp}｜${card.kana}｜${card.zh}`;
+    };
+    el('revealBtn').onclick = () => { const card = filteredCards()[practiceIndex]; el('practiceAnswer').textContent = `${card.jp}｜${card.kana}｜${card.zh}`; speak(card.jp); };
+    el('newPracticeBtn').onclick = newPractice;
+
+    renderFilters(); renderCard(); newPractice();
+  </script>
+</body>
+</html>
