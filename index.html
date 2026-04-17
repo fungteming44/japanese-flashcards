@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語フラッシュカード</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 500px; min-height: 300px; display: flex; flex-direction: column; justify-content: space-around; margin-bottom: 20px; }
+        .japanese { font-size: 48px; font-weight: bold; color: #1a73e8; margin: 20px 0; }
+        .reading { font-size: 24px; color: #5f6368; }
+        .meaning { font-size: 32px; color: #202124; margin: 10px 0; }
+        .controls { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        button { padding: 12px 25px; font-size: 18px; cursor: pointer; border: none; border-radius: 10px; transition: transform 0.1s, background-color 0.2s; background-color: #1a73e8; color: white; }
+        button:active { transform: scale(0.95); }
+        button.secondary { background-color: #e8f0fe; color: #1a73e8; }
+        .settings { margin-top: 20px; font-size: 14px; color: #5f6368; }
+    </style>
+</head>
+<body>
+
+<div class="card" id="card">
+    <div class="reading" id="reading">讀音</div>
+    <div class="japanese" id="japanese">日本語</div>
+    <div class="meaning" id="meaning">意思</div>
+</div>
+
+<div class="controls">
+    <button onclick="speak()">🔊 語音</button>
+    <button onclick="nextCard()">下一張</button>
+</div>
+
+<div class="settings">
+    速度: <span id="speedValue">0.5</span>x
+</div>
+
+<script>
+    const flashcards = [
+        // 基本數字
+        { j: "一", r: "いち", m: "1" }, { j: "二", r: "に", m: "2" }, { j: "三", r: "さん", m: "3" },
+        { j: "四", r: "よん/し", m: "4" }, { j: "五", r: "ご", m: "5" }, { j: "六", r: "ろく", m: "6" },
+        { j: "七", r: "なな/しち", m: "7" }, { j: "八", r: "はち", m: "8" }, { j: "九", r: "きゅう/く", m: "9" },
+        { j: "十", r: "じゅう", m: "10" }, { j: "百", r: "ひゃく", m: "100" }, { j: "千", r: "せん", m: "1000" },
+        { j: "万", r: "まん", m: "10000" },
+
+        // 時間/金錢
+        { j: "今", r: "いま", m: "現在" }, { j: "時", r: "じ", m: "時/點" }, { j: "分", r: "ふん/ぷん", m: "分" },
+        { j: "円", r: "えん", m: "日圓" }, { j: "いくら", r: "いくら", m: "多少錢" },
+
+        // 食物 (部分示例)
+        { j: "寿司", r: "すし", m: "壽司" }, { j: "ラーメン", r: "らーめん", m: "拉麵" },
+        { j: "うどん", r: "うどん", m: "烏龍麵" }, { j: "天ぷら", r: "てんぷら", m: "天婦羅" },
+        { j: "和牛", r: "わぎゅう", m: "和牛" }, { j: "焼肉", r: "やきにく", m: "燒肉" },
+        { j: "刺身", r: "さしみ", m: "生魚片" }, { j: "おにぎり", r: "おにぎり", m: "飯糰" },
+        { j: "弁当", r: "べんとう", m: "便當" }, { j: "生ビール", r: "なまびーる", m: "生啤酒" },
+        { j: "日本酒", r: "にほんしゅ", m: "日本酒" }, { j: "お茶", r: "おちゃ", m: "綠茶" },
+        { j: "水", r: "みず", m: "水" }, { j: "コーラ", r: "こーら", m: "可樂" },
+
+        // 常用口語 (部分示例)
+        { j: "こんにちは", r: "こんにちは", m: "你好" },
+        { j: "ありがとうございます", r: "ありがとうございます", m: "謝謝" },
+        { j: "すみません", r: "すみません", m: "不好意思/請問" },
+        { j: "これをお願いします", r: "これをおねがいします", m: "請給我這個" },
+        { j: "お会計をお願いします", r: "おかいけいをおねがいします", m: "請結帳" },
+        { j: "美味しいです", r: "おいしいです", m: "很好吃" }
+    ];
+
+    let currentIndex = 0;
+    const synth = window.speechSynthesis;
+
+    function updateCard() {
+        const card = flashcards[currentIndex];
+        document.getElementById('japanese').textContent = card.j;
+        document.getElementById('reading').textContent = card.r;
+        document.getElementById('meaning').textContent = card.m;
+    }
+
+    function nextCard() {
+        currentIndex = (currentIndex + 1) % flashcards.length;
+        updateCard();
+    }
+
+    function speak() {
+        if (synth.speaking) synth.cancel();
+        const utter = new SpeechSynthesisUtterance(flashcards[currentIndex].j);
+        utter.lang = 'ja-JP';
+        utter.rate = 0.5; // 設置語速為 0.5
+        synth.speak(utter);
+    }
+
+    // 初始化
+    updateCard();
+</script>
+
+</body>
+</html>
