@@ -1,182 +1,243 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="zh-Hant" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>日本語フラッシュカード</title>
+    <title>日文字卡</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background-color: #f0f2f5; }
-        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 500px; min-height: 300px; display: flex; flex-direction: column; justify-content: space-around; margin-bottom: 20px; }
-        .japanese { font-size: 48px; font-weight: bold; color: #1a73e8; margin: 20px 0; }
-        .reading { font-size: 24px; color: #5f6368; }
-        .meaning { font-size: 32px; color: #202124; margin: 10px 0; }
-        .controls { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        button { padding: 12px 25px; font-size: 18px; cursor: pointer; border: none; border-radius: 10px; transition: transform 0.1s, background-color 0.2s; background-color: #1a73e8; color: white; }
-        button:active { transform: scale(0.95); }
-        button.secondary { background-color: #e8f0fe; color: #1a73e8; }
-        .settings { margin-top: 20px; font-size: 14px; color: #5f6368; }
+        :root {
+            --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+            --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+            --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+            --radius-md: 0.75rem; --radius-lg: 1rem; --radius-full: 9999px;
+            --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #ffffff;
+            --color-text: #28251d; --color-text-muted: #6f6b63; --color-border: #d4d1ca;
+            --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-chip: #dff1ef;
+            --font-body: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
+            --font-display: 'Noto Sans JP', 'Noto Sans TC', sans-serif;
+            --shadow-md: 0 10px 30px rgba(40,37,29,0.08);
+        }
+        [data-theme="dark"] {
+            --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #22211f;
+            --color-text: #ece8df; --color-text-muted: #b2aca2; --color-border: #393836;
+            --color-primary: #4f98a3; --color-primary-hover: #68abb5; --color-chip: #2c3f40;
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.35);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; font-family: var(--font-body); background: linear-gradient(180deg, var(--color-bg), var(--color-surface)); color: var(--color-text); line-height: 1.5; }
+        .wrap { max-width: 980px; margin: 0 auto; padding: var(--space-6); }
+        .topbar, .controls, .filters, .nav-actions, .practice-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+        .topbar { justify-content: space-between; align-items: center; margin-bottom: var(--space-6); }
+        h1 { margin: 0 0 var(--space-2); font-size: var(--text-xl); }
+        h2 { margin: 0; font-size: var(--text-lg); }
+        p { margin: 0; color: var(--color-text-muted); }
+        .panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-md); margin-bottom: var(--space-6); }
+        button { min-height: 44px; padding: 0.6rem 1.2rem; border-radius: var(--radius-full); border: 1px solid transparent; background: var(--color-surface-2); color: var(--color-text); font-weight: 700; cursor: pointer; transition: 0.2s; font-size: var(--text-sm); }
+        button.primary { background: var(--color-primary); color: #fff; }
+        button.primary:hover { background: var(--color-primary-hover); }
+        button.ghost { background: transparent; border-color: var(--color-border); }
+        .chip { background: var(--color-surface-2); border: 1px solid var(--color-border); padding: 0.4rem 1rem; border-radius: var(--radius-full); cursor: pointer; font-size: var(--text-sm); }
+        .chip.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+        .card { margin-top: var(--space-6); min-height: 360px; display: grid; gap: var(--space-4); align-content: space-between; }
+        .meta { display: flex; justify-content: space-between; gap: var(--space-3); color: var(--color-text-muted); font-size: var(--text-sm); }
+        .jp { font-family: var(--font-display); font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); font-weight: 700; margin: 1rem 0; }
+        .reading { color: var(--color-primary); font-size: var(--text-lg); margin-bottom: 0.5rem; }
+        .meaning { font-size: var(--text-lg); margin-bottom: 0.5rem; }
+        .example { color: var(--color-text-muted); font-size: var(--text-base); }
+        .hidden { display: none; }
+        .practice { margin-top: var(--space-6); display: grid; gap: var(--space-4); }
+        input[type="text"] { width: 100%; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-surface-2); color: var(--color-text); font-size: var(--text-base); }
+        .feedback { font-weight: 700; min-height: 1.5em; }
+        @media (max-width: 640px) { .wrap { padding: var(--space-4); } .topbar { flex-direction: column; align-items: flex-start; } button { width: 100%; } }
     </style>
 </head>
 <body>
 
-<div class="card" id="card">
-    <div class="reading" id="reading">讀音</div>
-    <div class="japanese" id="japanese">日本語</div>
-    <div class="meaning" id="meaning">意思</div>
-</div>
+<div class="wrap">
+    <div class="topbar">
+        <div>
+            <h1>日文字卡</h1>
+            <p>已加載內容，可切換字卡或練習模式。</p>
+        </div>
+        <div class="controls">
+            <button class="ghost" id="themeBtn">🌙/☀️</button>
+            <button class="primary" id="cardModeBtn">字卡模式</button>
+            <button class="ghost" id="practiceModeBtn">練習模式</button>
+        </div>
+    </div>
 
-<div class="controls">
-    <button onclick="speak()">🔊 語音</button>
-    <button onclick="nextCard()">下一張</button>
-</div>
+    <div class="panel" id="filters"></div>
 
-<div class="settings">
-    速度: <span id="speedValue">0.5</span>x
+    <div class="panel" id="cardPanel">
+        <div class="card">
+            <div>
+                <div class="meta">
+                    <span id="category">分類</span>
+                    <span id="counter">0/0</span>
+                </div>
+                <div class="jp" id="jp">日本語</div>
+                <div class="reading" id="reading">よみがな</div>
+                <button class="primary" id="speakBtn" style="width:auto">🔊 播放</button>
+                <div class="meaning" id="meaning">中文意思</div>
+                <div class="example" id="example">例句範例</div>
+            </div>
+            <div class="nav-actions">
+                <button class="ghost" id="prevBtn">← 上一張</button>
+                <button class="ghost" id="flipBtn">顯示答案</button>
+                <button class="primary" id="nextBtn">下一張 →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel hidden" id="practicePanel">
+        <h2>練習模式</h2>
+        <p class="example">輸入你記得的日文或讀音</p>
+        <div class="practice">
+            <div id="practicePrompt" class="meaning">題目顯示</div>
+            <input type="text" id="practiceInput" placeholder="在此輸入...">
+            <div class="practice-actions">
+                <button class="primary" id="checkBtn">檢查答案</button>
+                <button class="ghost" id="revealBtn">睇答案+播音</button>
+                <button class="ghost" id="newPracticeBtn">換一句</button>
+            </div>
+            <div class="feedback" id="feedback"></div>
+            <div class="example" id="practiceAnswer"></div>
+        </div>
+    </div>
 </div>
 
 <script>
     const flashcards = [
-        // 1. 數字、時間、金錢
-        {j:"一", r:"いち", m:"1"}, {j:"二", r:"に", m:"2"}, {j:"三", r:"さん", m:"3"}, {j:"四", r:"よん/し", m:"4"},
-        {j:"五", r:"ご", m:"5"}, {j:"六", r:"ろく", m:"6"}, {j:"七", r:"なな/しち", m:"7"}, {j:"八", r:"はち", m:"8"},
-        {j:"九", r:"きゅう/く", m:"9"}, {j:"十", r:"じゅう", m:"10"}, {j:"百", r:"ひゃく", m:"100"}, {j:"千", r:"せん", m:"1000"},
-        {j:"万", r:"まん", m:"10000"}, {j:"円", r:"えん", m:"日圓"}, {j:"いくら", r:"いくら", m:"多少錢"},
-        {j:"今", r:"いま", m:"現在"}, {j:"時", r:"じ", m:"點/時"}, {j:"分", r:"ふん/ぷん", m:"分"},
-        {j:"半", r:"はん", m:"半"}, {j:"今日", r:"きょう", m:"今天"}, {j:"明日", r:"あした", m:"明天"},
-        {j:"昨日", r:"きのう", m:"昨天"}, {j:"月曜日", r:"げつようび", m:"週一"}, {j:"火曜日", r:"かようび", m:"週二"},
-        {j:"水曜日", r:"すいようび", m:"週三"}, {j:"木曜日", r:"もくようび", m:"週四"}, {j:"金曜日", r:"きんようび", m:"週五"},
-        {j:"土曜日", r:"どようび", m:"週六"}, {j:"日曜日", r:"にちようび", m:"週日"},
+        // 數字、時間、金錢
+        {cat:"數字", j:"一", r:"いち", m:"1"}, {cat:"數字", j:"二", r:"に", m:"2"}, {cat:"數字", j:"三", r:"さん", m:"3"}, {cat:"數字", j:"四", r:"よん", m:"4"},
+        {cat:"數字", j:"五", r:"ご", m:"5"}, {cat:"數字", j:"六", r:"ろく", m:"6"}, {cat:"數字", j:"七", r:"なな", m:"7"}, {cat:"數字", j:"八", r:"はち", m:"8"},
+        {cat:"數字", j:"九", r:"きゅう", m:"9"}, {cat:"數字", j:"十", r:"じゅう", m:"10"}, {cat:"時間", j:"今", r:"いま", m:"現在"}, {cat:"時間", j:"時", r:"じ", m:"點/時"},
+        {cat:"金錢", j:"円", r:"えん", m:"日圓"}, {cat:"金錢", j:"いくら", r:"いくら", m:"多少錢"},
 
-        // 2. 常用口語 (50句)
-        {j:"こんにちは", r:"こんにちは", m:"你好"}, {j:"ありがとうございます", r:"ありがとうございます", m:"謝謝"},
-        {j:"すみません", r:"すみません", m:"不好意思 / 請問"}, {j:"はい", r:"はい", m:"是"}, {j:"いいえ", r:"いいえ", m:"不"},
-        {j:"これをお願いします", r:"これをおねがいします", m:"請給我這個"}, {j:"お会計をお願いします", r:"おかいけいをおねがいします", m:"請結帳"},
-        {j:"美味しいです", r:"おいしいです", m:"很好吃"}, {j:"どこですか", r:"どこですか", m:"在哪裡？"},
-        {j:"トイレはどこですか", r:"トイレはどこですか", m:"廁所在哪裡？"}, {j:"わかりました", r:"わかりました", m:"明白了"},
-        {j:"わかりません", r:"わかりません", m:"不明白"}, {j:"ちょっと待ってください", r:"ちょっとまってください", m:"請等一下"},
-        {j:"大丈夫です", r:"だいじょうぶです", m:"沒關係"}, {j:"お願いします", r:"おねがいします", m:"請 / 拜託"},
-        {j:"ごめんなさい", r:"ごめんなさい", m:"對不起"}, {j:"おはようございます", r:"おはようございます", m:"早安"},
-        {j:"こんばんは", r:"こんばんは", m:"晚安"}, {j:"おやすみなさい", r:"おやすみなさい", m:"晚安(睡前)"},
-        {j:"はじめまして", r:"はじめまして", m:"初次見面"}, {j:"よろしくお願いします", r:"よろしくおねがいします", m:"請多指教"},
-        {j:"いただきます", r:"いただきます", m:"我開動了"}, {j:"ごちそうさまでした", r:"ごちそうさまでした", m:"多謝款待"},
-        {j:"いらっしゃいませ", r:"いらっしゃいませ", m:"歡迎光臨"}, {j:"英語が話せますか", r:"えいごがはなせますか", m:"會說英語嗎？"},
-        {j:"日本語が少しわかります", r:"にほんごがすこしわかります", m:"懂一點日語"}, {j:"もう一度お願いします", r:"もういちどおねがいします", m:"請再說一遍"},
-        {j:"ゆっくりお願いします", r:"ゆっくりおねがいします", m:"請說慢一點"}, {j:"助けてください", r:"たすけてください", m:"請幫幫我"},
-        {j:"これは何ですか", r:"これはなんですか", m:"這是什麼？"}, {j:"いくらですか", r:"いくらですか", m:"多少錢？"},
-        {j:"クレジットカードは使えますか", r:"クレジットカードはつかえますか", m:"可以用信用卡嗎？"},
-        {j:"免税できますか", r:"めんぜいできますか", m:"可以免稅嗎？"}, {j:"予約しています", r:"よやくしています", m:"我有預約"},
-        {j:"二人です", r:"ふたりです", m:"兩位"}, {j:"禁煙席をお願いします", r:"きんえんせきをおねがいします", m:"請給我禁菸席"},
-        {j:"メニューをください", r:"メニューをください", m:"請給我菜單"}, {j:"お水をお願いします", r:"おみずをおねがいします", m:"請給我水"},
-        {j:"オススメは何ですか", r:"オススメはなんですか", m:"有什麼推薦的嗎？"}, {j:"これを二つください", r:"これをふたつください", m:"請給我兩個這個"},
-        {j:"辛いですか", r:"からいですか", m:"辣嗎？"}, {j:"甘いですか", r:"あまいですか", m:"甜嗎？"},
-        {j:"好きです", r:"すきです", m:"喜歡"}, {j:"嫌いです", r:"きらいです", m:"討厭"}, {j:"綺麗ですね", r:"きれいですね", m:"很漂亮"},
-        {j:"楽しいです", r:"たのしいです", m:"開心"}, {j:"疲れました", r:"つかれました", m:"累了"},
-        {j:"お腹が空きました", r:"おなかがすきました", m:"肚子餓了"}, {j:"喉が渇きました", r:"のどがかわきました", m:"口渴了"},
-        {j:"また会いましょう", r:"またあいましょう", m:"再見"},
+        // 食物
+        {cat:"食物", j:"寿司", r:"すし", m:"壽司"}, {cat:"食物", j:"刺身", r:"さしみ", m:"生魚片"}, {cat:"食物", j:"ラーメン", r:"らーめん", m:"拉麵"},
+        {cat:"食物", j:"天ぷら", r:"てんぷら", m:"天婦羅"}, {cat:"食物", j:"和牛", r:"わぎゅう", m:"和牛"}, {cat:"食物", j:"焼肉", r:"やきにく", m:"燒肉"},
 
-        // 3. 飲品 (20)
-        {j:"水", r:"みず", m:"水"}, {j:"お茶", r:"おちゃ", m:"綠茶"}, {j:"コーヒー", r:"コーヒー", m:"咖啡"},
-        {j:"紅茶", r:"こうちゃ", m:"紅茶"}, {j:"牛乳", r:"ぎゅうにゅう", m:"牛奶"}, {j:"ジュース", r:"ジュース", m:"果汁"},
-        {j:"コーラ", r:"コーラ", m:"可樂"}, {j:"ビール", r:"ビール", m:"啤酒"}, {j:"生ビール", r:"なまびーる", m:"生啤酒"},
-        {j:"日本酒", r:"にほんしゅ", m:"日本酒"}, {j:"焼酎", r:"しょうちゅう", m:"燒酎"}, {j:"ワイン", r:"ワイン", m:"葡萄酒"},
-        {j:"ウイスキー", r:"ウイスキー", m:"威士忌"}, {j:"梅酒", r:"うめしゅ", m:"梅酒"}, {j:"烏龍茶", r:"うーろんちゃ", m:"烏龍茶"},
-        {j:"炭酸水", r:"たんさんすい", m:"氣泡水"}, {j:"豆乳", r:"とうにゅう", m:"豆漿"}, {j:"ココア", r:"ココア", m:"可可"},
-        {j:"メロンソーダ", r:"メロンソーダ", m:"哈密瓜蘇打"}, {j:"ラテ", r:"ラテ", m:"拿鐵"},
+        // 飲品
+        {cat:"飲品", j:"水", r:"みず", m:"水"}, {cat:"飲品", j:"お茶", r:"おちゃ", m:"綠茶"}, {cat:"飲品", j:"生ビール", r:"なまびーる", m:"生啤酒"},
+        {cat:"飲品", j:"コーヒー", r:"こーひー", m:"咖啡"},
 
-        // 4. 食物 (200)
-        {j:"寿司", r:"すし", m:"壽司"}, {j:"刺身", r:"さしみ", m:"生魚片"}, {j:"天ぷら", r:"てんぷら", m:"天婦羅"},
-        {j:"ラーメン", r:"ラーメン", m:"拉麵"}, {j:"うどん", r:"うどん", m:"烏龍麵"}, {j:"蕎麦", r:"そば", m:"蕎麥麵"},
-        {j:"焼肉", r:"やきにく", m:"燒肉"}, {j:"牛丼", r:"ぎゅうどん", m:"牛肉丼"}, {j:"親子丼", r:"おやこどん", m:"親子丼"},
-        {j:"カツ丼", r:"かつどん", m:"炸豬排丼"}, {j:"カレーライス", r:"カレーライス", m:"咖哩飯"}, {j:"お好み焼き", r:"おこのみやき", m:"大阪燒"},
-        {j:"たこ焼き", r:"たこやき", m:"章魚燒"}, {j:"焼き鳥", r:"やきとり", m:"烤雞肉串"}, {j:"しゃぶしゃぶ", r:"しゃぶしゃぶ", m:"涮涮鍋"},
-        {j:"すき焼き", r:"すきやき", m:"壽喜燒"}, {j:"懐石料理", r:"かいせきりょうり", m:"懷石料理"}, {j:"おにぎり", r:"おにぎり", m:"飯糰"},
-        {j:"味噌汁", r:"みそしる", m:"味噌湯"}, {j:"納豆", r:"なっとう", m:"納豆"}, {j:"卵焼き", r:"たまごやき", m:"玉子燒"},
-        {j:"餃子", r:"ぎょうざ", m:"餃子"}, {j:"唐揚げ", r:"からあげ", m:"炸雞"}, {j:"とんかつ", r:"とんかつ", m:"炸豬排"},
-        {j:"鰻", r:"うなぎ", m:"鰻魚"}, {j:"焼きそば", r:"やきそば", m:"炒麵"}, {j:"冷やし中華", r:"ひやしちゅうか", m:"中華涼麵"},
-        {j:"茶碗蒸し", r:"ちゃわんむし", m:"茶碗蒸"}, {j:"豆腐", r:"とうふ", m:"豆腐"}, {j:"漬物", r:"つけもの", m:"醃漬物"},
-        {j:"枝豆", r:"えだまめ", m:"毛豆"}, {j:"弁当", r:"べんとう", m:"便當"}, {j:"牛肉", r:"ぎゅうにく", m:"牛肉"},
-        {j:"豚肉", r:"ぶたにく", m:"豬肉"}, {j:"鶏肉", r:"とりにく", m:"雞肉"}, {j:"挽肉", r:"ひきにく", m:"絞肉"},
-        {j:"ハム", r:"ハム", m:"火腿"}, {j:"ソーセージ", r:"ソーセージ", m:"香腸"}, {j:"魚", r:"さかな", m:"魚"},
-        {j:"鮭", r:"さけ", m:"鮭魚"}, {j:"鮪", r:"まぐろ", m:"鮪魚"}, {j:"鯛", r:"たい", m:"鯛魚"},
-        {j:"鯖", r:"さば", m:"鯖魚"}, {j:"秋刀魚", r:"さんま", m:"秋刀魚"}, {j:"海老", r:"えび", m:"蝦"},
-        {j:"蟹", r:"かに", m:"螃蟹"}, {j:"烏賊", r:"いか", m:"烏賊/花枝"}, {j:"蛸", r:"たこ", m:"章魚"},
-        {j:"貝", r:"かい", m:"貝類"}, {j:"牡蠣", r:"かき", m:"牡蠣"}, {j:"野菜", r:"やさい", m:"蔬菜"},
-        {j:"キャベツ", r:"キャベツ", m:"高麗菜"}, {j:"レタス", r:"レタス", m:"生菜"}, {j:"玉ねぎ", r:"たまねぎ", m:"洋蔥"},
-        {j:"人参", r:"にんじん", m:"紅蘿蔔"}, {j:"大根", r:"だいこん", m:"白蘿蔔"}, {j:"茄子", r:"なす", m:"茄子"},
-        {j:"トマト", r:"トマト", m:"番茄"}, {j:"きゅうり", r:"きゅうり", m:"小黃瓜"}, {j:"ピーマン", r:"ピーマン", m:"青椒"},
-        {j:"じゃがいも", r:"じゃがいも", m:"馬鈴薯"}, {j:"さつまいも", r:"さつまいも", m:"地瓜"}, {j:"南瓜", r:"かぼちゃ", m:"南瓜"},
-        {j:"茸", r:"きのこ", m:"菇類"}, {j:"椎茸", r:"しいたけ", m:"香菇"}, {j:"葱", r:"ねぎ", m:"蔥"},
-        {j:"ニンニク", r:"ニンニク", m:"大蒜"}, {j:"生姜", r:"しょうが", m:"生薑"}, {j:"果物", r:"くだもの", m:"水果"},
-        {j:"リンゴ", r:"リンゴ", m:"蘋果"}, {j:"バナナ", r:"バナナ", m:"香蕉"}, {j:"みかん", r:"みかん", m:"橘子"},
-        {j:"苺", r:"いちご", m:"草莓"}, {j:"葡萄", r:"ぶどう", m:"葡萄"}, {j:"桃", r:"もも", m:"桃子"},
-        {j:"梨", r:"なし", m:"梨子"}, {j:"スイカ", r:"スイカ", m:"西瓜"}, {j:"メロン", r:"メロン", m:"哈密瓜"},
-        {j:"パイナップル", r:"パイナップル", m:"鳳梨"}, {j:"柿", r:"かき", m:"柿子"}, {j:"パン", r:"パン", m:"麵包"},
-        {j:"サンドイッチ", r:"サンドイッチ", m:"三明治"}, {j:"パスタ", r:"パスタ", m:"義大利麵"}, {j:"ピザ", r:"ピザ", m:"披薩"},
-        {j:"ハンバーグ", r:"ハンバーグ", m:"漢堡排"}, {j:"ハンバーガー", r:"ハンバーガー", m:"漢堡"}, {j:"ステーキ", r:"ステーキ", m:"牛排"},
-        {j:"サラダ", r:"サラダ", m:"沙拉"}, {j:"スープ", r:"スープ", m:"湯"}, {j:"デザート", r:"デザート", m:"甜點"},
-        {j:"ケーキ", r:"ケーキ", m:"蛋糕"}, {j:"アイスクリーム", r:"アイスクリーム", m:"冰淇淋"}, {j:"チョコレート", r:"チョコレート", m:"巧克力"},
-        {j:"クッキー", r:"クッキー", m:"餅乾"}, {j:"プリン", r:"プリン", m:"布丁"}, {j:"和菓子", r:"わがし", m:"和菓子"},
-        {j:"団子", r:"だんご", m:"糰子"}, {j:"羊羹", r:"ようかん", m:"羊羹"}, {j:"饅頭", r:"まんじゅう", m:"饅頭(甜)"},
-        {j:"どら焼き", r:"どらやき", m:"銅鑼燒"}, {j:"鯛焼き", r:"たいやき", m:"鯛魚燒"}, {j:"かき氷", r:"かきごおり", m:"刨冰"},
-        {j:"飴", r:"あめ", m:"糖果"}, {j:"餅", r:"もち", m:"Mochi"}, {j:"煎餅", r:"せんべい", m:"仙貝"},
-        {j:"ポテトチップス", r:"ポテトチップス", m:"洋芋片"}, {j:"チーズ", r:"チーズ", m:"起司"}, {j:"バター", r:"バター", m:"奶油"},
-        {j:"ヨーグルト", r:"ヨーグルト", m:"優格"}, {j:"卵", r:"たまご", m:"雞蛋"}, {j:"米", r:"こめ", m:"米"},
-        {j:"小麦粉", r:"こむぎこ", m:"小麥粉"}, {j:"砂糖", r:"さとう", m:"砂糖"}, {j:"塩", r:"しお", m:"鹽"},
-        {j:"酢", r:"す", m:"醋"}, {j:"醤油", r:"しょうゆ", m:"醬油"}, {j:"味噌", r:"みそ", m:"味噌"},
-        {j:"油", r:"あぶら", m:"油"}, {j:"胡椒", r:"こしょう", m:"胡椒"}, {j:"マヨネーズ", r:"マヨネーズ", m:"美乃滋"},
-        {j:"ケチャップ", r:"ケチャップ", m:"番茄醬"}, {j:"ソース", r:"ソース", m:"醬汁"}, {j:"わさび", r:"わさび", m:"わさび"},
-        {j:"からし", r:"からし", m:"黃芥末"}, {j:"七味唐辛子", r:"しちみとうがらし", m:"七味粉"}, {j:"焼き魚", r:"やきざかな", m:"烤魚"},
-        {j:"煮魚", r:"にざかな", m:"煮魚"}, {j:"照り焼き", r:"てりやき", m:"照燒"}, {j:"竜田揚げ", r:"たつたあげ", m:"炸雞"},
-        {j:"メンチカツ", r:"メンチカツ", m:"炸肉餅"}, {j:"コロッケ", r:"コロッケ", m:"可樂餅"}, {j:"エビフライ", r:"エビフライ", m:"炸蝦"},
-        {j:"オムライス", r:"オムライス", m:"蛋包飯"}, {j:"ピラフ", r:"ピラフ", m:"燉飯"}, {j:"チャーハン", r:"チャーハン", m:"炒飯"},
-        {j:"麻婆豆腐", r:"まーぼーどうふ", m:"麻婆豆腐"}, {j:"酢豚", r:"すぶた", m:"糖醋肉"}, {j:"八宝菜", r:"はっぽうさい", m:"八寶菜"},
-        {j:"春巻き", r:"はるまき", m:"春捲"}, {j:"シュウマイ", r:"シュウマイ", m:"燒賣"}, {j:"肉まん", r:"にくまん", m:"肉包"},
-        {j:"小籠包", r:"しょうろんぽう", m:"小籠包"}, {j:"担々麺", r:"たんたんめん", m:"擔擔麵"}, {j:"ちゃんぽん", r:"ちゃんぽん", m:"強棒麵"},
-        {j:"ほうとう", r:"ほうとう", m:"餺飥"}, {j:"きりたんぽ", r:"きりたんぽ", m:"切蒲英"}, {j:"もんじゃ焼き", r:"もんじゃやき", m:"文字燒"},
-        {j:"串カツ", r:"くしかつ", m:"串炸"}, {j:"ジンギスカン", r:"ジンギスカン", m:"烤羊肉"}, {j:"皿うどん", r:"さらうどん", m:"皿烏龍"},
-        {j:"明太子", r:"めんたいこ", m:"明太子"}, {j:"数の子", r:"かずのこ", m:"鯡魚卵"}, {j:"いくら", r:"いくら", m:"鮭魚卵"},
-        {j:"ウニ", r:"ウニ", m:"海膽"}, {j:"鮑", r:"あわび", m:"鮑魚"}, {j:"サザエ", r:"サザエ", m:"榮螺"},
-        {j:"帆立", r:"ほたて", m:"帆立貝"}, {j:"浅利", r:"あさり", m:"蛤蜊"}, {j:"蜆", r:"しじみ", m:"蜆"},
-        {j:"鰤", r:"ぶり", m:"鰤魚"}, {j:"カツオ", r:"カツオ", m:"鰹魚"}, {j:"鰺", r:"あじ", m:"竹筴魚"},
-        {j:"鰯", r:"いわし", m:"沙丁魚"}, {j:"キス", r:"キス", m:"沙鮻"}, {j:"穴子", r:"あなご", m:"星鰻"},
-        {j:"フグ", r:"フグ", m:"河豚"}, {j:"スッポン", r:"スッポン", m:"鱉"}, {j:"馬刺し", r:"ばさし", m:"馬肉刺身"},
-        {j:"レバー", r:"レバー", m:"肝臟"}, {j:"タン", r:"タン", m:"牛舌"}, {j:"ロース", r:"ロース", m:"里肌"},
-        {j:"バラ", r:"バラ", m:"五花肉"}, {j:"モモ", r:"モモ", m:"腿肉"}, {j:"手羽先", r:"てばさき", m:"雞翅"},
-        {j:"砂肝", r:"すなぎも", m:"雞胗"}, {j:"つくね", r:"つくね", m:"雞肉丸"}, {j:"軟骨", r:"なんこつ", m:"軟骨"},
-        {j:"ホルモン", r:"ホルモン", m:"內臟"}, {j:"ミミガー", r:"ミミガー", m:"豬耳"}, {j:"ラフテー", r:"ラフテー", m:"燉肉"},
-        {j:"ゴーヤチャンプルー", r:"ゴーヤチャンプルー", m:"苦瓜雜炒"}, {j:"ソーキそば", r:"ソーキそば", m:"排骨麵"}, {j:"ほうれん草", r:"ほうれんそう", m:"菠菜"},
-        {j:"小松菜", r:"こまつな", m:"小松菜"}, {j:"水菜", r:"みずな", m:"水菜"}, {j:"春菊", r:"しゅんぎく", m:"春菊"},
-        {j:"もやし", r:"もやし", m:"豆芽"}, {j:"白菜", r:"はくさい", m:"白菜"}, {j:"牛蒡", r:"ごぼう", m:"牛蒡"},
-        {j:"蓮根", r:"れんこん", m:"蓮藕"}, {j:"里芋", r:"さといも", m:"小芋頭"}, {j:"長芋", r:"ながいも", m:"山藥"},
-        {j:"筍", r:"たけのこ", m:"竹筍"}, {j:"アスパラガス", r:"アスパラガス", m:"蘆筍"}, {j:"ブロッコリー", r:"ブロッコリー", m:"花椰菜"},
-        {j:"カリフラワー", r:"カリフラワー", m:"白花椰"}, {j:"オクラ", r:"オクラ", m:"秋葵"}, {j:"ズッキーニ", r:"ズッキーニ", m:"櫛瓜"},
-        {j:"パプリカ", r:"パプリカ", m:"甜椒"}, {j:"梅干し", r:"うめぼし", m:"梅干"}
+        // 口語
+        {cat:"口語", j:"こんにちは", r:"こんにちは", m:"你好"}, {cat:"口語", j:"ありがとうございます", r:"ありがとうございます", m:"謝謝"},
+        {cat:"口語", j:"すみません", r:"すみません", m:"不好意思 / 請問"}, {cat:"口語", j:"これをお願いします", r:"これをおねがいします", m:"請給我這個"},
+        {cat:"口語", j:"トイレはどこですか", r:"トイレはどこですか", m:"廁所在哪裡？"}
     ];
 
-    let currentIndex = 0;
-    const synth = window.speechSynthesis;
+    let current = 0;
+    let currentFilter = "";
+    let shown = false;
+    let practiceIndex = 0;
 
-    function updateCard() {
-        const card = flashcards[currentIndex];
-        document.getElementById('japanese').textContent = card.j;
-        document.getElementById('reading').textContent = card.r;
-        document.getElementById('meaning').textContent = card.m;
+    const categories = ["全部", ...new Set(flashcards.map(c => c.cat))];
+    const el = id => document.getElementById(id);
+
+    function getFiltered() {
+        return currentFilter === "全部" || !currentFilter ? flashcards : flashcards.filter(c => c.cat === currentFilter);
     }
 
-    function nextCard() {
-        currentIndex = Math.floor(Math.random() * flashcards.length); // 隨機
-        updateCard();
+    function renderFilters() {
+        el('filters').innerHTML = categories.map(cat => 
+            `<button class="chip ${currentFilter === cat || (!currentFilter && cat==="全部") ? 'active' : ''}" onclick="setFilter('${cat}')">${cat}</button>`
+        ).join('');
     }
 
-    function speak() {
-        if (synth.speaking) synth.cancel();
-        const utter = new SpeechSynthesisUtterance(flashcards[currentIndex].j);
+    window.setFilter = (cat) => {
+        currentFilter = cat;
+        current = 0;
+        renderFilters();
+        renderCard();
+    };
+
+    function renderCard() {
+        const list = getFiltered();
+        const card = list[current];
+        el('category').textContent = card.cat;
+        el('counter').textContent = `${current + 1}/${list.length}`;
+        el('jp').textContent = card.j;
+        el('reading').textContent = card.r;
+        el('meaning').textContent = card.m;
+        
+        el('reading').classList.toggle('hidden', !shown);
+        el('meaning').classList.toggle('hidden', !shown);
+        el('example').classList.toggle('hidden', !shown);
+        el('flipBtn').textContent = shown ? "隱藏答案" : "顯示答案";
+    }
+
+    function speak(text) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
         utter.lang = 'ja-JP';
         utter.rate = 0.5;
-        synth.speak(utter);
+        window.speechSynthesis.speak(utter);
     }
 
-    updateCard();
+    el('prevBtn').onclick = () => { current = (current - 1 + getFiltered().length) % getFiltered().length; shown = false; renderCard(); };
+    el('nextBtn').onclick = () => { current = (current + 1) % getFiltered().length; shown = false; renderCard(); };
+    el('flipBtn').onclick = () => { shown = !shown; renderCard(); };
+    el('speakBtn').onclick = () => speak(getFiltered()[current].j);
+
+    el('themeBtn').onclick = () => {
+        const root = document.documentElement;
+        root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    };
+
+    el('cardModeBtn').onclick = () => {
+        el('cardPanel').classList.remove('hidden');
+        el('practicePanel').classList.add('hidden');
+        el('cardModeBtn').className = 'primary';
+        el('practiceModeBtn').className = 'ghost';
+    };
+
+    el('practiceModeBtn').onclick = () => {
+        el('cardPanel').classList.add('hidden');
+        el('practicePanel').classList.remove('hidden');
+        el('cardModeBtn').className = 'ghost';
+        el('practiceModeBtn').className = 'primary';
+        newPractice();
+    };
+
+    function newPractice() {
+        const list = getFiltered();
+        practiceIndex = Math.floor(Math.random() * list.length);
+        const card = list[practiceIndex];
+        el('practicePrompt').textContent = `請寫出「${card.m}」的日文：`;
+        el('practiceInput').value = "";
+        el('feedback').textContent = "";
+        el('practiceAnswer').textContent = "";
+    }
+
+    el('checkBtn').onclick = () => {
+        const card = getFiltered()[practiceIndex];
+        const input = el('practiceInput').value.trim();
+        if (input === card.j || input === card.r) {
+            el('feedback').textContent = "✅ 正確！";
+            el('feedback').style.color = "green";
+        } else {
+            el('feedback').textContent = "❌ 再試試看";
+            el('feedback').style.color = "red";
+        }
+    };
+
+    el('revealBtn').onclick = () => {
+        const card = getFiltered()[practiceIndex];
+        el('practiceAnswer').textContent = `答案：${card.j} (${card.r})`;
+        speak(card.j);
+    };
+
+    el('newPracticeBtn').onclick = newPractice;
+
+    renderFilters();
+    renderCard();
 </script>
 
 </body>
