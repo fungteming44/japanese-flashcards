@@ -13,70 +13,44 @@
             --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
             --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
             --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
-            --space-2: 0.5rem;
-            --space-3: 0.75rem;
-            --space-4: 1rem;
-            --space-6: 1.5rem;
-            --space-8: 2rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --radius-full: 9999px;
-            --color-bg: #f7f6f2;
-            --color-surface: #f9f8f5;
-            --color-surface-2: #ffffff;
-            --color-text: #28251d;
-            --color-text-muted: #6f6b63;
-            --color-border: #d4d1ca;
-            --color-primary: #01696f;
-            --color-primary-hover: #0c4e54;
-            --color-chip: #dff1ef;
+            --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+            --radius-md: 0.75rem; --radius-lg: 1rem; --radius-full: 9999px;
+            --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #ffffff;
+            --color-text: #28251d; --color-text-muted: #6f6b63; --color-border: #d4d1ca;
+            --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-chip: #dff1ef;
             --font-body: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
             --font-display: 'Noto Sans JP', 'Noto Sans TC', sans-serif;
             --shadow-md: 0 10px 30px rgba(40,37,29,0.08);
         }
         :root[data-theme="dark"] {
-            --color-bg: #171614;
-            --color-surface: #1c1b19;
-            --color-surface-2: #22211f;
-            --color-text: #ece8df;
-            --color-text-muted: #b2aca2;
-            --color-border: #393836;
-            --color-primary: #4f98a3;
-            --color-primary-hover: #68abb5;
-            --color-chip: #2c3f40;
+            --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #22211f;
+            --color-text: #ece8df; --color-text-muted: #b2aca2; --color-border: #393836;
+            --color-primary: #4f98a3; --color-primary-hover: #68abb5; --color-chip: #2c3f40;
             --shadow-md: 0 10px 30px rgba(0,0,0,0.35);
         }
         * { box-sizing: border-box; }
-        body { margin: 0; min-height: 100vh; font-family: var(--font-body); background: linear-gradient(180deg, var(--color-bg), var(--color-surface)); color: var(--color-text); }
+        body { margin: 0; min-height: 100vh; font-family: var(--font-body); background: linear-gradient(180deg, var(--color-bg), var(--color-surface)); color: var(--color-text); line-height: 1.5; }
         .wrap { max-width: 980px; margin: 0 auto; padding: var(--space-6); }
-        .topbar, .controls, .filters, .nav-actions, .practice-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
-        .topbar { justify-content: space-between; align-items: center; margin-bottom: var(--space-6); }
-        h1 { margin: 0 0 var(--space-2); font-size: var(--text-xl); }
-        h2 { margin: 0; font-size: var(--text-lg); }
-        p { margin: 0; color: var(--color-text-muted); }
+        .topbar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-6); }
+        h1 { margin: 0 0 var(--space-2); font-size: var(--text-xl); font-weight: 700; }
         .panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-md); margin-bottom: var(--space-6); }
-        button { min-height: 44px; padding: 0.9rem 1rem; border-radius: var(--radius-full); border: 1px solid transparent; background: var(--color-surface-2); color: var(--color-text); font-weight: 700; cursor: pointer; transition: 0.2s; }
-        button.primary { background: var(--color-primary); color: #fff; }
+        .filters { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+        .chip { padding: 0.5rem 1.2rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-surface-2); cursor: pointer; font-size: 0.95rem; transition: 0.2s; color: var(--color-text); }
+        .chip.active { background: var(--color-chip); border-color: var(--color-primary); color: var(--color-primary); font-weight: 700; }
+        .card { min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .meta { display: flex; justify-content: space-between; font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4); }
+        .jp { font-family: var(--font-display); font-size: clamp(2.2rem, 1.8rem + 2vw, 3.8rem); font-weight: 700; color: var(--color-text); margin: var(--space-4) 0; }
+        .reading { font-size: var(--text-lg); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: 500; }
+        .meaning-wrap { border-top: 1px solid var(--color-border); padding-top: var(--space-6); }
+        .meaning { font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-2); }
+        .example { color: var(--color-text-muted); font-size: 0.95rem; }
+        .controls { display: flex; gap: var(--space-3); margin-top: var(--space-8); }
+        button { flex: 1; padding: 1rem; border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-surface-2); color: var(--color-text); font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        button.primary { background: var(--color-primary); color: #fff; border: none; }
         button.primary:hover { background: var(--color-primary-hover); }
-        button.ghost { background: transparent; border-color: var(--color-border); }
-        .chip { background: var(--color-chip); }
-        .chip.active { border-color: var(--color-primary); color: var(--color-primary); }
-        .card { min-height: 360px; display: grid; gap: var(--space-4); align-content: space-between; }
-        .meta { display: flex; justify-content: space-between; gap: var(--space-3); color: var(--color-text-muted); font-size: var(--text-sm); }
-        .jp { font-family: var(--font-display); font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); font-weight: 700; line-height: 1.2; }
-        .reading { color: var(--color-primary); font-size: var(--text-lg); }
-        .meaning { font-size: var(--text-lg); }
-        .example, .small { color: var(--color-text-muted); }
+        button#speakBtn { width: fit-content; flex: none; padding: 0.5rem 1.2rem; background: var(--color-primary); color: #fff; }
         .hidden { display: none; }
-        .practice { margin-top: var(--space-6); display: grid; gap: var(--space-4); }
-        input[type="text"] { width: 100%; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-surface-2); color: var(--color-text); font-size: var(--text-base); }
-        .feedback { font-weight: 700; min-height: 1.5em; }
-        @media (max-width: 640px) {
-            .wrap { padding: var(--space-4); }
-            .topbar { flex-direction: column; align-items: flex-start; }
-            button { width: 100%; }
-            button.primary#speakBtn { width: auto; }
-        }
+        @media (max-width: 640px) { .topbar { flex-direction: column; } .controls { flex-direction: column; } button { width: 100%; } }
     </style>
 </head>
 <body>
@@ -84,11 +58,11 @@
         <div class="topbar">
             <div>
                 <h1>日文字卡－旅遊篇</h1>
-                <p>已經預載 50 句，不使你自己輸入。可直接睇卡、播音、做練習。</p>
+                <p>已經預載 50+ 句，不使你自己輸入。可直接睇卡、播音、做練習。</p>
             </div>
-            <div class="controls">
-                <button class="ghost" id="themeBtn">🌙/☀️</button>
-                <button class="ghost" id="flipBtn">收起答案</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="chip" id="themeBtn" style="padding: 0.5rem 0.8rem;">🌙/☀️</button>
+                <button class="chip" id="flipBtn" style="padding: 0.5rem 1rem;">收起答案</button>
             </div>
         </div>
 
@@ -96,43 +70,38 @@
 
         <div class="panel">
             <div class="card">
-                <div class="meta">
-                    <span id="category"></span>
-                    <span id="counter"></span>
-                </div>
+                <div class="meta"><span id="category"></span><span id="counter"></span></div>
                 <div>
                     <div class="jp" id="jp"></div>
                     <div class="reading" id="reading"></div>
-                    <button class="primary" id="speakBtn" style="width: auto; padding: 0.5rem 1.2rem; margin-top: 0.5rem;">🔊 讀出</button>
+                    <button id="speakBtn">🔊 讀出</button>
                 </div>
-                <div>
+                <div class="meaning-wrap" id="meaningWrap">
                     <div class="meaning" id="meaning"></div>
                     <div class="example" id="example"></div>
                 </div>
             </div>
-            <div class="nav-actions" style="margin-top: var(--space-6);">
-                <button class="ghost" id="prevBtn">← 上一張</button>
+            <div class="controls">
+                <button id="prevBtn">← 上一張</button>
                 <button class="primary" id="nextBtn">下一張 →</button>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="controls">
-                <button class="primary" id="cardModeBtn" style="flex: 1;">字卡模式</button>
-                <button class="ghost" id="practiceModeBtn" style="flex: 1;">練習模式</button>
+        <div class="controls" style="margin-top: 2rem;">
+            <button class="primary" id="cardModeBtn">字卡模式</button>
+            <button id="practiceModeBtn">練習模式</button>
+        </div>
+
+        <div class="panel hidden" id="practicePanel" style="margin-top: 1.5rem;">
+            <h2>做練習</h2>
+            <div id="practicePrompt" style="font-size: 1.2rem; margin-bottom: 1rem; font-weight: 700;"></div>
+            <input type="text" id="practiceInput" placeholder="請輸入日文..." style="width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
+            <div style="display: flex; gap: 10px;">
+                <button class="primary" id="checkBtn">檢查</button>
+                <button id="revealBtn">顯示答案</button>
+                <button id="newPracticeBtn">換一題</button>
             </div>
-            <div class="practice hidden" id="practicePanel">
-                <h2>做練習</h2>
-                <div id="practicePrompt" class="meaning"></div>
-                <input type="text" id="practiceInput" placeholder="請輸入日文 (平假名或漢字)">
-                <div class="practice-actions">
-                    <button class="primary" id="checkBtn">檢查答案</button>
-                    <button class="ghost" id="revealBtn">顯示答案</button>
-                    <button class="ghost" id="newPracticeBtn">換一題</button>
-                </div>
-                <div class="feedback" id="feedback"></div>
-                <div class="small" id="practiceAnswer"></div>
-            </div>
+            <div id="feedback" style="margin-top: 1rem; font-weight: 700;"></div>
         </div>
     </div>
 
@@ -140,128 +109,73 @@
         const cards = [
             { cat: "基本", jp: "こんにちは。", kana: "konnichiwa", zh: "中文：你好。", ex: "用法：日間最基本打招呼。" },
             { cat: "基本", jp: "ありがとうございます。", kana: "arigatou gozaimasu", zh: "中文：謝謝。", ex: "用法：表示感謝。" },
-            { cat: "餐廳", jp: "メニューをください。", kana: "menyuu o kudasai", zh: "中文：請給我菜單。", ex: "用法：在餐廳點菜前使用。" },
+            { cat: "求助", jp: "すみません。", kana: "sumimasen", zh: "中文：不好意思 / 請問。", ex: "用法：引起注意或道歉。" },
             { cat: "交通", jp: "駅はどこですか？", kana: "eki wa doko desu ka", zh: "中文：車站路在哪裏？", ex: "用法：問路時使用。" },
-            { cat: "購物", jp: "これはいくらですか？", kana: "kore wa ikura desu ka", zh: "中文：這個多少錢？", ex: "用法：詢問價格。" }
-            // 這裡可以加入更多附加檔案中的單字...
+            { cat: "餐廳", jp: "メニューをください。", kana: "menyuu o kudasai", zh: "中文：請給我菜單。", ex: "用法：點餐時使用。" },
+            { cat: "購物", jp: "これはいくらですか？", kana: "kore wa ikura desu ka", zh: "中文：這個多少錢？", ex: "用法：詢問價格。" },
+            { cat: "酒店", jp: "チェックインをお願いします。", kana: "chekkuin o onegaishimasu", zh: "中文：我想辦理入住。", ex: "用法：到達酒店櫃檯時。" },
+            { cat: "觀光", jp: "写真を撮ってもいいですか？", kana: "shashin o tottemo ii desu ka", zh: "中文：可以拍照嗎？", ex: "用法：徵求許可。" },
+            { cat: "緊急", jp: "助けてください！", kana: "tasukete kudasai", zh: "中文：請救救我！", ex: "用法：遇到危險時。" },
+            { cat: "地名", jp: "福岡", kana: "fukuoka", zh: "中文：福岡", ex: "地點：九州熱門旅遊城市。" },
+            { cat: "食物", jp: "ラーメン", kana: "raamen", zh: "中文：拉麵", ex: "食物：日本代表性美食。" },
+            { cat: "飲品", jp: "お茶", kana: "ocha", zh: "中文：茶", ex: "飲品：日本常用飲品。" },
+            { cat: "數字", jp: "一", kana: "ichi", zh: "中文：1", ex: "數字：基本計數。" }
+            // 更多單字可從附加檔案複製...
         ];
 
-        let current = 0;
-        let currentFilter = "";
-        let shown = true;
-        let practiceIndex = 0;
-
+        let current = 0, currentFilter = "", shown = true, practiceIndex = 0;
         const el = {
-            filters: document.getElementById('filters'),
-            category: document.getElementById('category'),
-            counter: document.getElementById('counter'),
-            jp: document.getElementById('jp'),
-            reading: document.getElementById('reading'),
-            meaning: document.getElementById('meaning'),
-            example: document.getElementById('example'),
-            flipBtn: document.getElementById('flipBtn'),
-            prevBtn: document.getElementById('prevBtn'),
-            nextBtn: document.getElementById('nextBtn'),
-            speakBtn: document.getElementById('speakBtn'),
-            themeBtn: document.getElementById('themeBtn'),
-            practicePanel: document.getElementById('practicePanel'),
-            practicePrompt: document.getElementById('practicePrompt'),
-            practiceInput: document.getElementById('practiceInput'),
-            feedback: document.getElementById('feedback'),
-            practiceAnswer: document.getElementById('practiceAnswer'),
-            checkBtn: document.getElementById('checkBtn'),
-            revealBtn: document.getElementById('revealBtn'),
-            newPracticeBtn: document.getElementById('newPracticeBtn'),
-            cardModeBtn: document.getElementById('cardModeBtn'),
-            practiceModeBtn: document.getElementById('practiceModeBtn')
+            filters: document.getElementById('filters'), jp: document.getElementById('jp'), reading: document.getElementById('reading'),
+            meaning: document.getElementById('meaning'), example: document.getElementById('example'), category: document.getElementById('category'),
+            counter: document.getElementById('counter'), meaningWrap: document.getElementById('meaningWrap'),
+            flipBtn: document.getElementById('flipBtn'), prevBtn: document.getElementById('prevBtn'), nextBtn: document.getElementById('nextBtn'),
+            speakBtn: document.getElementById('speakBtn'), themeBtn: document.getElementById('themeBtn'), practicePanel: document.getElementById('practicePanel'),
+            practicePrompt: document.getElementById('practicePrompt'), practiceInput: document.getElementById('practiceInput'),
+            feedback: document.getElementById('feedback'), checkBtn: document.getElementById('checkBtn'), revealBtn: document.getElementById('revealBtn'),
+            newPracticeBtn: document.getElementById('newPracticeBtn'), cardModeBtn: document.getElementById('cardModeBtn'), practiceModeBtn: document.getElementById('practiceModeBtn')
         };
 
-        function filteredCards() {
-            return currentFilter ? cards.filter(c => c.cat === currentFilter) : cards;
-        }
+        function filteredCards() { return currentFilter ? cards.filter(c => c.cat === currentFilter) : cards; }
 
         function renderFilters() {
             const categories = ["", ...new Set(cards.map(c => c.cat))];
-            const names = { "": "全部", "基本": "基本", "餐廳": "餐廳", "交通": "交通", "購物": "購物" };
-            el.filters.innerHTML = categories.map(cat => 
-                `<button class="chip ${cat === currentFilter ? 'active' : ''}" data-cat="${cat}">${names[cat] || cat}</button>`
-            ).join('');
-            
-            el.filters.querySelectorAll('.chip').forEach(btn => {
-                btn.onclick = () => {
-                    currentFilter = btn.dataset.cat;
-                    current = 0;
-                    renderFilters();
-                    renderCard();
-                };
-            });
+            const names = { "": "全部", "基本": "基本", "求助": "求助", "交通": "交通", "餐廳": "餐廳", "酒店": "酒店", "購物": "購物", "觀光": "觀光", "緊急": "緊急", "地名": "地名", "食物": "食物", "飲品": "飲品", "數字": "數字" };
+            el.filters.innerHTML = categories.map(cat => `<button class="chip ${cat === currentFilter ? 'active' : ''}" data-cat="${cat}">${names[cat] || cat}</button>`).join('');
+            el.filters.querySelectorAll('.chip').forEach(btn => btn.onclick = () => { currentFilter = btn.dataset.cat; current = 0; renderFilters(); renderCard(); });
         }
 
         function renderCard() {
-            const list = filteredCards();
-            const card = list[current];
-            el.category.textContent = card.cat;
-            el.counter.textContent = `${current + 1} / ${list.length}`;
-            el.jp.textContent = card.jp;
-            el.reading.textContent = card.kana;
-            el.meaning.textContent = card.zh;
-            el.example.textContent = card.ex;
-            el.meaning.classList.toggle('hidden', !shown);
-            el.example.classList.toggle('hidden', !shown);
-            el.flipBtn.textContent = shown ? "收起答案" : "顯示答案";
+            const list = filteredCards(), card = list[current];
+            el.category.textContent = card.cat; el.counter.textContent = `${current + 1} / ${list.length}`;
+            el.jp.textContent = card.jp; el.reading.textContent = card.kana; el.meaning.textContent = card.zh; el.example.textContent = card.ex;
+            el.meaningWrap.classList.toggle('hidden', !shown); el.flipBtn.textContent = shown ? "收起答案" : "顯示答案";
         }
 
-        function speak(text) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'ja-JP';
-            u.rate = 0.8;
-            window.speechSynthesis.speak(u);
-        }
+        function speak(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'ja-JP'; u.rate = 0.8; window.speechSynthesis.speak(u); }
 
         el.prevBtn.onclick = () => { current = (current - 1 + filteredCards().length) % filteredCards().length; renderCard(); };
         el.nextBtn.onclick = () => { current = (current + 1) % filteredCards().length; renderCard(); };
         el.flipBtn.onclick = () => { shown = !shown; renderCard(); };
         el.speakBtn.onclick = () => speak(filteredCards()[current].jp);
-        el.themeBtn.onclick = () => {
-            const root = document.documentElement;
-            root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        };
-
-        el.cardModeBtn.onclick = () => { el.practicePanel.classList.add('hidden'); el.cardModeBtn.className = "primary"; el.practiceModeBtn.className = "ghost"; };
-        el.practiceModeBtn.onclick = () => { el.practicePanel.classList.remove('hidden'); el.practiceModeBtn.className = "primary"; el.cardModeBtn.className = "ghost"; newPractice(); };
+        el.themeBtn.onclick = () => { const root = document.documentElement; root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); };
+        el.cardModeBtn.onclick = () => { el.practicePanel.classList.add('hidden'); };
+        el.practiceModeBtn.onclick = () => { el.practicePanel.classList.remove('hidden'); newPractice(); };
 
         function newPractice() {
-            const list = filteredCards();
-            practiceIndex = Math.floor(Math.random() * list.length);
-            el.practicePrompt.textContent = list[practiceIndex].zh;
-            el.practiceInput.value = "";
-            el.feedback.textContent = "";
-            el.practiceAnswer.textContent = "";
+            const list = filteredCards(); practiceIndex = Math.floor(Math.random() * list.length);
+            el.practicePrompt.textContent = list[practiceIndex].zh; el.practiceInput.value = ""; el.feedback.textContent = "";
         }
 
         el.checkBtn.onclick = () => {
-            const card = filteredCards()[practiceIndex];
-            const val = el.practiceInput.value.trim();
-            if (val === card.jp || val === card.kana) {
-                el.feedback.textContent = "✅ 正確！";
-                el.feedback.style.color = "var(--color-primary)";
-            } else {
-                el.feedback.textContent = "❌ 再試試看";
-                el.feedback.style.color = "red";
-            }
+            const card = filteredCards()[practiceIndex], val = el.practiceInput.value.trim();
+            if (val === card.jp || val === card.kana) { el.feedback.textContent = "✅ 正確！"; el.feedback.style.color = "var(--color-primary)"; }
+            else { el.feedback.textContent = "❌ 錯誤"; el.feedback.style.color = "red"; }
         };
 
-        el.revealBtn.onclick = () => {
-            const card = filteredCards()[practiceIndex];
-            el.practiceAnswer.textContent = `答案：${card.jp} (${card.kana})`;
-            speak(card.jp);
-        };
-
+        el.revealBtn.onclick = () => { el.feedback.textContent = `答案：${filteredCards()[practiceIndex].jp}`; speak(filteredCards()[practiceIndex].jp); };
         el.newPracticeBtn.onclick = newPractice;
 
-        renderFilters();
-        renderCard();
+        renderFilters(); renderCard();
     </script>
 </body>
 </html>
