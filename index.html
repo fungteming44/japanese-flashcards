@@ -414,6 +414,53 @@
   {cat:'數字', jp:'八つ', kana:'yattsu', zh:'八個', ex:'八件。'},
   {cat:'數字', jp:'九つ', kana:'kokonotsu', zh:'九個', ex:'九樣。'},
   {cat:'數字', jp:'十個', kana:'jukko', zh:'十個', ex:'十份、十杯等。'}
+        // ===== 時間 cards（時間表達、日期、星期）=====
+        {cat:'時間', jp:'今何時ですか。', kana:'ima nanji desu ka', zh:'依家幾點？', ex:'最常用問時間。'},
+  {cat:'時間', jp:'何時からですか。', kana:'nanji kara desu ka', zh:'幾點開始？', ex:'問開始時間。'},
+  {cat:'時間', jp:'何時までですか。', kana:'nanji made desu ka', zh:'到幾點？', ex:'問結束時間。'},
+  {cat:'時間', jp:'１時。', kana:'ichiji', zh:'1 點。', ex:'一點鐘。'},
+  {cat:'時間', jp:'２時。', kana:'niji', zh:'2 點。', ex:'兩點鐘。'},
+  {cat:'時間', jp:'３時。', kana:'sanji', zh:'3 點。', ex:'三點鐘。'},
+  {cat:'時間', jp:'４時。', kana:'yoji', zh:'4 點。', ex:'四點鐘。'},
+  {cat:'時間', jp:'５時。', kana:'goji', zh:'5 點。', ex:'五點鐘。'},
+  {cat:'時間', jp:'６時。', kana:'rokuji', zh:'6 點。', ex:'六點鐘。'},
+  {cat:'時間', jp:'７時。', kana:'shichiji', zh:'7 點。', ex:'七點鐘。'},
+  {cat:'時間', jp:'８時。', kana:'hachiji', zh:'8 點。', ex:'八點鐘。'},
+  {cat:'時間', jp:'９時。', kana:'kuji', zh:'9 點。', ex:'九點鐘。'},
+  {cat:'時間', jp:'１０時。', kana:'juuji', zh:'10 點。', ex:'十點鐘。'},
+  {cat:'時間', jp:'１１時。', kana:'juuichiji', zh:'11 點。', ex:'十一點鐘。'},
+  {cat:'時間', jp:'１２時。', kana:'juuniji', zh:'12 點。', ex:'十二點鐘。'},
+  {cat:'時間', jp:'半。', kana:'han', zh:'半鐘。', ex:'例：3 時半＝sanji han。'},
+  {cat:'時間', jp:'午前。', kana:'gozen', zh:'上午 AM。', ex:'上午時段。'},
+  {cat:'時間', jp:'午後。', kana:'gogo', zh:'下午 PM。', ex:'下午時段。'},
+  {cat:'時間', jp:'今日。', kana:'kyou', zh:'今日。', ex:'表達今天。'},
+  {cat:'時間', jp:'明日。', kana:'ashita / asu', zh:'聴日。', ex:'表達明天。'},
+  {cat:'時間', jp:'昨日。', kana:'kinou', zh:'尋日。', ex:'表達昨天。'},
+  {cat:'時間', jp:'月曜日。', kana:'getsuyoubi', zh:'星期一。', ex:'Monday。'},
+  {cat:'時間', jp:'火曜日。', kana:'kayoubi', zh:'星期二。', ex:'Tuesday。'},
+  {cat:'時間', jp:'水曜日。', kana:'suiyoubi', zh:'星期三。', ex:'Wednesday。'},
+  {cat:'時間', jp:'木曜日。', kana:'mokuyoubi', zh:'星期四。', ex:'Thursday。'},
+  {cat:'時間', jp:'金曜日。', kana:'kinyoubi', zh:'星期五。', ex:'Friday。'},
+  {cat:'時間', jp:'土曜日。', kana:'doyoubi', zh:'星期六。', ex:'Saturday。'},
+  {cat:'時間', jp:'日曜日。', kana:'nichiyoubi', zh:'星期日。', ex:'Sunday。'},
+  // ===== 時間 cards 完 =====
+  // ===== 金錢 cards（日圓、價錢、比較）=====
+      {cat:'金錢', jp:'いくらですか。', kana:'ikura desu ka', zh:'幾多錢？', ex:'最常用問價格。'},
+  {cat:'金錢', jp:'全部でいくらですか。', kana:'zenbu de ikura desu ka', zh:'一共幾多錢？', ex:'問總價。'},
+  {cat:'金錢', jp:'１円。', kana:'ichi en', zh:'1 圓。', ex:'一圓。'},
+  {cat:'金錢', jp:'１０円。', kana:'juu en', zh:'10 圓。', ex:'十圓。'},
+  {cat:'金錢', jp:'１００円。', kana:'hyaku en', zh:'100 圓。', ex:'一百圓。'},
+  {cat:'金錢', jp:'５００円。', kana:'gohyaku en', zh:'500 圓。', ex:'五百圓。'},
+  {cat:'金錢', jp:'１０００円。', kana:'sen en', zh:'1000 圓。', ex:'一千圓。'},
+  {cat:'金錢', jp:'一万円。', kana:'ichiman en', zh:'1 萬圓。', ex:'一萬圓。'},
+  {cat:'金錢', jp:'お釣りをください。', kana:'otsuri o kudasai', zh:'請找錢。', ex:'要求找零。'},
+  {cat:'金錢', jp:'高いです。', kana:'takai desu', zh:'貴。', ex:'表達價格高。'},
+  {cat:'金錢', jp:'安いです。', kana:'yasui desu', zh:'平。', ex:'表達價格低。'},
+  {cat:'金錢', jp:'もっと安いのはありますか。', kana:'motto yasui no wa arimasu ka', zh:'有冗平少少嘗？', ex:'問有冗便宜選擇。'},
+  {cat:'金錢', jp:'おまけしてください。', kana:'omake shite kudasai', zh:'唔該打個折。', ex:'要求優惠。'},
+  {cat:'金錢', jp:'カードで支払います。', kana:'kaado de shiharaimasu', zh:'用卡係。', ex:'表明用信用卡付款。'},
+  {cat:'金錢', jp:'現金で。', kana:'genkin de', zh:'用現金。', ex:'現金付款。'},
+  // ===== 金錢 cards 完 =====
   // ===== 數字 cards 完 =====
     ];
 
@@ -436,7 +483,7 @@
     }
     function speak(text){
       if(!('speechSynthesis' in window)){ alert('此瀏覽器不支援語音朗讀'); return; }
-      const u = new SpeechSynthesisUtterance(text); u.lang='ja-JP'; u.rate=0.1;
+      const u = new SpeechSynthesisUtterance(text); u.lang='ja-JP'; u.rate=0.5;
       const voices = speechSynthesis.getVoices(); const ja = voices.find(v => (v.lang||'').toLowerCase().includes('ja'));
       if(ja) u.voice = ja; speechSynthesis.cancel(); speechSynthesis.speak(u);
     }
